@@ -147,43 +147,6 @@
           }
         }
       ]
-    },
-    {
-      "id": "security-copilot",
-      "name": "Security Copilot",
-      "type": "microsoft-security-copilot",
-      "purpose": "AI-assisted security analysis and summarization via Microsoft Security Copilot",
-      "config": {
-        "tenantId": "${SECURITY_COPILOT_TENANT_ID}",
-        "resourceId": "${SECURITY_COPILOT_RESOURCE_ID}"
-      },
-      "auth": {
-        "method": "DefaultAzureCredential",
-        "envVars": ["SECURITY_COPILOT_TENANT_ID", "SECURITY_COPILOT_RESOURCE_ID"]
-      },
-      "tools": [
-        {
-          "name": "seccopilot_analyze_incident",
-          "description": "Use Security Copilot to provide AI-assisted analysis of a Sentinel incident",
-          "parameters": {
-            "incidentId": "The Sentinel incident ID to analyze"
-          }
-        },
-        {
-          "name": "seccopilot_generate_summary",
-          "description": "Use Security Copilot to generate a natural language summary of security findings",
-          "parameters": {
-            "context": "The security data or findings to summarize"
-          }
-        },
-        {
-          "name": "seccopilot_suggest_queries",
-          "description": "Use Security Copilot to suggest KQL queries for further investigation",
-          "parameters": {
-            "context": "Description of what needs investigation"
-          }
-        }
-      ]
     }
   ]
 }

@@ -2,22 +2,11 @@
 name: threat-hunter
 description: 'Proactive Threat Hunter — translates hypotheses into KQL hunting queries, analyzes findings, maps to MITRE ATT&CK, and generates detection rules.'
 tools:
-  - sentinel-data-exploration/*
-  - sentinel-triage/*
   - AzureMCP/*
   - MicrosoftLearn/*
   - shell
   - read
   - edit
-mcp-servers:
-  sentinel-data-exploration:
-    type: 'http'
-    url: 'https://sentinel.microsoft.com/mcp/data-exploration'
-    tools: ["*"]
-  sentinel-triage:
-    type: 'http'
-    url: 'https://sentinel.microsoft.com/mcp/triage'
-    tools: ["*"]
 ---
 
 # Threat Hunter
@@ -42,7 +31,6 @@ The following MCP tools are available through the skills above:
 - `loganalytics_get_table_schema` — Get table schemas for targeted hunting queries
 - `sentinel_get_incident_alerts`, `sentinel_get_analytics_rule` — For MITRE mapping
 - `sentinel_list_analytics_rules` — For detection coverage analysis
-- `loganalytics_execute_query` — For detection rule validation
 
 ## Workflow
 
