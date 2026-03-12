@@ -1,0 +1,189 @@
+{
+  "servers": [
+    {
+      "id": "sentinel",
+      "name": "Microsoft Sentinel",
+      "type": "azure-sentinel",
+      "purpose": "Incident and analytics rule management for Microsoft Sentinel",
+      "config": {
+        "workspaceId": "${SENTINEL_WORKSPACE_ID}",
+        "resourceGroup": "${SENTINEL_RESOURCE_GROUP}",
+        "subscriptionId": "${SENTINEL_SUBSCRIPTION_ID}",
+        "tenantId": "${AZURE_TENANT_ID}"
+      },
+      "auth": {
+        "method": "DefaultAzureCredential",
+        "envVars": ["SENTINEL_WORKSPACE_ID", "SENTINEL_RESOURCE_GROUP", "SENTINEL_SUBSCRIPTION_ID", "AZURE_TENANT_ID"]
+      },
+      "tools": [
+        {
+          "name": "sentinel_list_incidents",
+          "description": "List recent Sentinel incidents with severity, status, and alert count",
+          "parameters": {
+            "filter": "Optional OData filter expression",
+            "top": "Maximum number of incidents to return (default: 20)"
+          }
+        },
+        {
+          "name": "sentinel_get_incident",
+          "description": "Get full details of a specific Sentinel incident by ID",
+          "parameters": {
+            "incidentId": "The incident ID to retrieve"
+          }
+        },
+        {
+          "name": "sentinel_get_incident_alerts",
+          "description": "Get all alerts associated with a specific incident",
+          "parameters": {
+            "incidentId": "The incident ID to get alerts for"
+          }
+        },
+        {
+          "name": "sentinel_get_incident_entities",
+          "description": "Get all entities (IPs, users, hosts, files) associated with an incident",
+          "parameters": {
+            "incidentId": "The incident ID to get entities for"
+          }
+        },
+        {
+          "name": "sentinel_list_analytics_rules",
+          "description": "List all active Sentinel analytics rules with their MITRE mappings",
+          "parameters": {}
+        },
+        {
+          "name": "sentinel_get_analytics_rule",
+          "description": "Get details of a specific analytics rule including KQL query and MITRE tactics/techniques",
+          "parameters": {
+            "ruleId": "The analytics rule ID to retrieve"
+          }
+        }
+      ]
+    },
+    {
+      "id": "loganalytics",
+      "name": "Log Analytics",
+      "type": "azure-log-analytics",
+      "purpose": "KQL query execution against the Log Analytics workspace",
+      "config": {
+        "workspaceId": "${LOGANALYTICS_WORKSPACE_ID}"
+      },
+      "auth": {
+        "method": "DefaultAzureCredential",
+        "envVars": ["LOGANALYTICS_WORKSPACE_ID"]
+      },
+      "tools": [
+        {
+          "name": "loganalytics_execute_query",
+          "description": "Execute a KQL query against the Log Analytics workspace and return results",
+          "parameters": {
+            "query": "The KQL query to execute",
+            "timespan": "Optional ISO 8601 duration (default: PT24H)"
+          }
+        },
+        {
+          "name": "loganalytics_list_tables",
+          "description": "List all available tables in the Log Analytics workspace",
+          "parameters": {}
+        },
+        {
+          "name": "loganalytics_get_table_schema",
+          "description": "Get the schema (columns, types) for a specific Log Analytics table",
+          "parameters": {
+            "tableName": "The table name to get schema for"
+          }
+        }
+      ]
+    },
+    {
+      "id": "threat-intel",
+      "name": "Threat Intelligence",
+      "type": "threat-intelligence",
+      "purpose": "IoC lookups and enrichment against threat intelligence sources",
+      "config": {
+        "tenantId": "${AZURE_TENANT_ID}",
+        "virusTotalApiKey": "${VIRUSTOTAL_API_KEY:-}",
+        "abuseIpDbApiKey": "${ABUSEIPDB_API_KEY:-}"
+      },
+      "auth": {
+        "method": "DefaultAzureCredential",
+        "envVars": ["AZURE_TENANT_ID"]
+      },
+      "tools": [
+        {
+          "name": "ti_lookup_ip",
+          "description": "Look up an IP address against threat intelligence sources and return reputation, geolocation, and associated threats",
+          "parameters": {
+            "ipAddress": "The IP address to look up"
+          }
+        },
+        {
+          "name": "ti_lookup_domain",
+          "description": "Look up a domain name against threat intelligence sources and return reputation and associated threats",
+          "parameters": {
+            "domain": "The domain name to look up"
+          }
+        },
+        {
+          "name": "ti_lookup_file_hash",
+          "description": "Look up a file hash (MD5, SHA1, SHA256) against threat intelligence sources",
+          "parameters": {
+            "hash": "The file hash to look up",
+            "hashType": "Hash type: md5, sha1, or sha256"
+          }
+        },
+        {
+          "name": "ti_lookup_url",
+          "description": "Look up a URL against threat intelligence sources and return reputation and scan results",
+          "parameters": {
+            "url": "The URL to look up"
+          }
+        },
+        {
+          "name": "ti_search_indicators",
+          "description": "Search Sentinel ThreatIntelligenceIndicator table for matching indicators",
+          "parameters": {
+            "value": "The indicator value to search for",
+            "type": "Optional indicator type filter: ipv4, domain, url, file"
+          }
+        }
+      ]
+    },
+    {
+      "id": "security-copilot",
+      "name": "Security Copilot",
+      "type": "microsoft-security-copilot",
+      "purpose": "AI-assisted security analysis and summarization via Microsoft Security Copilot",
+      "config": {
+        "tenantId": "${SECURITY_COPILOT_TENANT_ID}",
+        "resourceId": "${SECURITY_COPILOT_RESOURCE_ID}"
+      },
+      "auth": {
+        "method": "DefaultAzureCredential",
+        "envVars": ["SECURITY_COPILOT_TENANT_ID", "SECURITY_COPILOT_RESOURCE_ID"]
+      },
+      "tools": [
+        {
+          "name": "seccopilot_analyze_incident",
+          "description": "Use Security Copilot to provide AI-assisted analysis of a Sentinel incident",
+          "parameters": {
+            "incidentId": "The Sentinel incident ID to analyze"
+          }
+        },
+        {
+          "name": "seccopilot_generate_summary",
+          "description": "Use Security Copilot to generate a natural language summary of security findings",
+          "parameters": {
+            "context": "The security data or findings to summarize"
+          }
+        },
+        {
+          "name": "seccopilot_suggest_queries",
+          "description": "Use Security Copilot to suggest KQL queries for further investigation",
+          "parameters": {
+            "context": "Description of what needs investigation"
+          }
+        }
+      ]
+    }
+  ]
+}
