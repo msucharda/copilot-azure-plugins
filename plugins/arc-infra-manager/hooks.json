@@ -1,0 +1,71 @@
+{
+  "hooks": [
+    {
+      "id": "arc-block-bulk-remove-extension",
+      "trigger": "before-skill-execution",
+      "action": "block",
+      "pattern": "arc_remove_extension.*\\*|remove.*all\\s+extensions",
+      "message": "BLOCKED: Bulk extension removal across all servers is not permitted. Specify individual servers explicitly to remove extensions."
+    },
+    {
+      "id": "arc-block-delete-server",
+      "trigger": "before-skill-execution",
+      "action": "block",
+      "pattern": "delete.*arc.*server|az\\s+connectedmachine\\s+delete",
+      "message": "BLOCKED: Deleting Arc server resources removes them from Azure management permanently. Use 'azcmagent disconnect' on the server instead to cleanly unregister."
+    },
+    {
+      "id": "arc-warn-run-command",
+      "trigger": "before-skill-execution",
+      "action": "warn",
+      "pattern": "arc_run_command",
+      "message": "WARNING: Run Command executes scripts remotely on the target server. Review the script content carefully before proceeding.",
+      "confirm": true
+    },
+    {
+      "id": "arc-warn-install-updates",
+      "trigger": "before-skill-execution",
+      "action": "warn",
+      "pattern": "arc_install_updates",
+      "message": "WARNING: Installing updates may require a server reboot and could cause service interruption. Verify the maintenance window and reboot setting before proceeding.",
+      "confirm": true
+    },
+    {
+      "id": "arc-warn-cross-subscription",
+      "trigger": "before-skill-execution",
+      "action": "warn",
+      "pattern": "subscription.*\\,.*subscription|multiple.*subscriptions",
+      "message": "WARNING: This operation targets servers across multiple subscriptions. Confirm the scope is intentional.",
+      "confirm": true
+    },
+    {
+      "id": "arc-warn-production-tag",
+      "trigger": "before-skill-execution",
+      "action": "warn",
+      "pattern": "environment[=:\\s]*production|env[=:\\s]*prod",
+      "message": "WARNING: This operation targets servers tagged as production. Confirm this is intentional and that change management procedures have been followed.",
+      "confirm": true
+    },
+    {
+      "id": "arc-suggest-scope-filter",
+      "trigger": "before-skill-execution",
+      "action": "suggest",
+      "pattern": "arc_list_servers(?!.*resourceGroup)(?!.*osType)(?!.*status)(?!.*tag)",
+      "message": "SUGGESTION: This query lists all servers without a filter. Consider adding a resource group, OS type, status, or tag filter to narrow the scope."
+    },
+    {
+      "id": "arc-suggest-maintenance-window",
+      "trigger": "before-skill-execution",
+      "action": "suggest",
+      "pattern": "arc_install_updates|arc_run_command.*reboot|arc_run_command.*restart",
+      "message": "SUGGESTION: Before applying updates or rebooting servers, verify the maintenance window schedule and confirm the change has been approved."
+    },
+    {
+      "id": "arc-suggest-test-first",
+      "trigger": "before-skill-execution",
+      "action": "suggest",
+      "pattern": "(arc_install_extension|arc_install_updates|arc_run_command).*\\ball\\b",
+      "message": "SUGGESTION: This operation targets multiple servers. Consider running it on a single test server first to verify the outcome before fleet-wide execution."
+    }
+  ]
+}
