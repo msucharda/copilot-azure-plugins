@@ -1,0 +1,14 @@
+{
+  "plugins": [
+    {
+      "id": "sentinel-soc-operator",
+      "name": "Microsoft Sentinel SOC Operator",
+      "version": "1.0.0",
+      "description": "Complete SOC workflow automation for Microsoft Sentinel — triage, investigation, hunting, detection engineering, and reporting.",
+      "path": "plugins/sentinel-soc-operator",
+      "author": "Copilot Azure Plugins",
+      "category": "security",
+      "tags": ["sentinel", "soc", "incident-response", "kql", "mitre-attack", "threat-hunting"]
+    }
+  ]
+}

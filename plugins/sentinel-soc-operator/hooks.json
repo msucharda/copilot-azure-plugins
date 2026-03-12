@@ -1,0 +1,85 @@
+{
+  "hooks": [
+    {
+      "id": "kql-block-purge",
+      "trigger": "before-skill-execution",
+      "action": "block",
+      "pattern": "\\.purge",
+      "message": "BLOCKED: KQL .purge operations are destructive and permanently delete data. This operation is not permitted by the Sentinel SOC Operator plugin."
+    },
+    {
+      "id": "kql-block-delete",
+      "trigger": "before-skill-execution",
+      "action": "block",
+      "pattern": "\\|\\s*delete",
+      "message": "BLOCKED: KQL delete operations permanently remove rows. This operation is not permitted by the Sentinel SOC Operator plugin."
+    },
+    {
+      "id": "kql-block-drop-table",
+      "trigger": "before-skill-execution",
+      "action": "block",
+      "pattern": "\\.drop\\s+table",
+      "message": "BLOCKED: Dropping tables is a destructive operation. This operation is not permitted by the Sentinel SOC Operator plugin."
+    },
+    {
+      "id": "kql-block-drop-function",
+      "trigger": "before-skill-execution",
+      "action": "block",
+      "pattern": "\\.drop\\s+function",
+      "message": "BLOCKED: Dropping functions is a destructive operation. This operation is not permitted by the Sentinel SOC Operator plugin."
+    },
+    {
+      "id": "kql-warn-set-or-replace",
+      "trigger": "before-skill-execution",
+      "action": "warn",
+      "pattern": "\\.set-or-replace",
+      "message": "WARNING: .set-or-replace overwrites existing table data. Confirm this is intentional before proceeding.",
+      "confirm": true
+    },
+    {
+      "id": "kql-warn-externaldata",
+      "trigger": "before-skill-execution",
+      "action": "warn",
+      "pattern": "externaldata\\s*\\(",
+      "message": "WARNING: externaldata() loads data from an external source. Verify the source URL is trusted before proceeding.",
+      "confirm": true
+    },
+    {
+      "id": "kql-warn-http-request",
+      "trigger": "before-skill-execution",
+      "action": "warn",
+      "pattern": "http_request\\s*\\(",
+      "message": "WARNING: http_request() makes outbound HTTP calls from the query engine. Verify the destination is authorized before proceeding.",
+      "confirm": true
+    },
+    {
+      "id": "kql-warn-cross-workspace",
+      "trigger": "before-skill-execution",
+      "action": "warn",
+      "pattern": "workspace\\s*\\(",
+      "message": "WARNING: Cross-workspace query detected. Ensure the target workspace is authorized and the query is appropriately scoped.",
+      "confirm": true
+    },
+    {
+      "id": "kql-suggest-sort-limit",
+      "trigger": "before-skill-execution",
+      "action": "suggest",
+      "pattern": "\\|\\s*sort\\b(?!.*\\|\\s*(top|take|limit))",
+      "message": "SUGGESTION: This query sorts results without a row limit. Consider adding '| top 10000' or '| take 1000' to avoid scanning the full result set."
+    },
+    {
+      "id": "kql-suggest-join-hint",
+      "trigger": "before-skill-execution",
+      "action": "suggest",
+      "pattern": "\\|\\s*join\\b(?!.*hint\\.)",
+      "message": "SUGGESTION: This join does not include a performance hint. Consider adding 'hint.strategy=shuffle' or 'hint.shufflekey=key' for large datasets."
+    },
+    {
+      "id": "kql-suggest-time-bound",
+      "trigger": "before-skill-execution",
+      "action": "suggest",
+      "pattern": "^(?!.*TimeGenerated).*\\|\\s*where\\b",
+      "message": "SUGGESTION: This query may not include a TimeGenerated filter. Consider adding '| where TimeGenerated > ago(7d)' to limit the scan range and improve performance."
+    }
+  ]
+}

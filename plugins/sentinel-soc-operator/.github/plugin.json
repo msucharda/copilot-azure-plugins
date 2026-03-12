@@ -1,0 +1,119 @@
+{
+  "id": "sentinel-soc-operator",
+  "name": "Microsoft Sentinel SOC Operator",
+  "version": "1.0.0",
+  "description": "Copilot CLI plugin for Microsoft Sentinel SOC operators covering triage, investigation, hunting, detection engineering, and reporting workflows.",
+  "author": "Copilot Azure Plugins",
+  "license": "MIT",
+  "keywords": ["sentinel", "soc", "security", "incident-response", "kql", "mitre-attack", "threat-hunting"],
+  "agents": [
+    {
+      "id": "triage-analyst",
+      "path": "../agents/triage-analyst.agent.md",
+      "displayName": "Triage Analyst",
+      "description": "Tier 1 SOC triage analyst for initial incident assessment, entity enrichment, and escalation."
+    },
+    {
+      "id": "investigation-analyst",
+      "path": "../agents/investigation-analyst.agent.md",
+      "displayName": "Investigation Analyst",
+      "description": "Tier 2 investigation analyst for deep incident analysis, KQL querying, and timeline construction."
+    },
+    {
+      "id": "threat-hunter",
+      "path": "../agents/threat-hunter.agent.md",
+      "displayName": "Threat Hunter",
+      "description": "Proactive threat hunter for hypothesis-driven hunting, KQL crafting, and detection rule recommendations."
+    }
+  ],
+  "skills": [
+    {
+      "id": "summarize-incident",
+      "path": "../skills/summarize-incident.md",
+      "displayName": "Summarize Incident",
+      "description": "Retrieve and summarize a Sentinel incident with alerts and entities.",
+      "tags": ["triage", "incident"]
+    },
+    {
+      "id": "enrich-entities",
+      "path": "../skills/enrich-entities.md",
+      "displayName": "Enrich Entities",
+      "description": "Look up IPs, domains, users, and file hashes against threat intelligence.",
+      "tags": ["triage", "enrichment", "threat-intelligence"]
+    },
+    {
+      "id": "extract-iocs",
+      "path": "../skills/extract-iocs.md",
+      "displayName": "Extract IoCs",
+      "description": "Identify indicators of compromise from incident data or free text.",
+      "tags": ["triage", "ioc"]
+    },
+    {
+      "id": "map-mitre",
+      "path": "../skills/map-mitre.md",
+      "displayName": "Map MITRE ATT&CK",
+      "description": "Classify alerts, incidents, or findings by MITRE ATT&CK tactic and technique.",
+      "tags": ["mitre", "classification"]
+    },
+    {
+      "id": "generate-kql",
+      "path": "../skills/generate-kql.md",
+      "displayName": "Generate KQL",
+      "description": "Translate natural language questions into syntactically valid KQL queries.",
+      "tags": ["kql", "investigation", "hunting"]
+    },
+    {
+      "id": "execute-kql",
+      "path": "../skills/execute-kql.md",
+      "displayName": "Execute KQL",
+      "description": "Run a KQL query against Log Analytics and return structured results.",
+      "tags": ["kql", "execution"]
+    },
+    {
+      "id": "author-detection",
+      "path": "../skills/author-detection.md",
+      "displayName": "Author Detection Rule",
+      "description": "Generate KQL analytics rule templates from detection requirements.",
+      "tags": ["detection", "analytics-rule"]
+    },
+    {
+      "id": "generate-report",
+      "path": "../skills/generate-report.md",
+      "displayName": "Generate Report",
+      "description": "Query Sentinel data and produce formatted shift or SOC reports.",
+      "tags": ["reporting", "metrics"]
+    }
+  ],
+  "mcpServers": [
+    {
+      "id": "sentinel",
+      "name": "Microsoft Sentinel",
+      "configPath": "../.mcp.json",
+      "requiredEnv": ["SENTINEL_WORKSPACE_ID", "SENTINEL_RESOURCE_GROUP", "SENTINEL_SUBSCRIPTION_ID", "AZURE_TENANT_ID"]
+    },
+    {
+      "id": "loganalytics",
+      "name": "Log Analytics",
+      "configPath": "../.mcp.json",
+      "requiredEnv": ["LOGANALYTICS_WORKSPACE_ID"]
+    },
+    {
+      "id": "threat-intel",
+      "name": "Threat Intelligence",
+      "configPath": "../.mcp.json",
+      "requiredEnv": ["AZURE_TENANT_ID"]
+    },
+    {
+      "id": "security-copilot",
+      "name": "Security Copilot",
+      "configPath": "../.mcp.json",
+      "requiredEnv": ["SECURITY_COPILOT_TENANT_ID", "SECURITY_COPILOT_RESOURCE_ID"]
+    }
+  ],
+  "hooks": [
+    {
+      "id": "kql-safety",
+      "path": "../hooks.json"
+    }
+  ]
+}
