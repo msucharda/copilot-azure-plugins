@@ -1,3 +1,8 @@
+---
+name: generate-report
+description: 'Query Sentinel data and produce formatted shift reports or SOC metrics.'
+---
+
 # Generate Report
 
 ## Purpose

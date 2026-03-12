@@ -1,3 +1,8 @@
+---
+name: extract-iocs
+description: 'Identify indicators of compromise from incident data or free text.'
+---
+
 # Extract IoCs
 
 ## Purpose

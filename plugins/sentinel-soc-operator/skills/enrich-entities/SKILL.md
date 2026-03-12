@@ -1,3 +1,8 @@
+---
+name: enrich-entities
+description: 'Look up IPs, domains, users, and file hashes against threat intelligence sources.'
+---
+
 # Enrich Entities
 
 ## Purpose

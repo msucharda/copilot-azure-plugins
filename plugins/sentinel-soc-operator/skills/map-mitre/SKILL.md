@@ -1,3 +1,8 @@
+---
+name: map-mitre
+description: 'Classify alerts, incidents, or findings by MITRE ATT&CK tactic and technique.'
+---
+
 # Map MITRE ATT&CK
 
 ## Purpose

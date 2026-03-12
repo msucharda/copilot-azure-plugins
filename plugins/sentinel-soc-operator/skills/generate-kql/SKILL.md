@@ -1,3 +1,8 @@
+---
+name: generate-kql
+description: 'Translate natural language questions into syntactically valid KQL queries.'
+---
+
 # Generate KQL
 
 ## Purpose

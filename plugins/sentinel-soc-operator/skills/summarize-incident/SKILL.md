@@ -1,3 +1,8 @@
+---
+name: summarize-incident
+description: 'Retrieve and summarize a Sentinel incident with alerts, entities, and timeline.'
+---
+
 # Summarize Incident
 
 ## Purpose

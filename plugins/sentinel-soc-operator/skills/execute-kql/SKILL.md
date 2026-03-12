@@ -1,3 +1,8 @@
+---
+name: execute-kql
+description: 'Execute a KQL query against Log Analytics and return structured results.'
+---
+
 # Execute KQL
 
 ## Purpose

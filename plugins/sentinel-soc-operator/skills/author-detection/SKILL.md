@@ -1,3 +1,8 @@
+---
+name: author-detection
+description: 'Generate KQL analytics rule templates from detection requirements or hunting findings.'
+---
+
 # Author Detection Rule
 
 ## Purpose
