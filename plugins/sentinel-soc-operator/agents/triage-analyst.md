@@ -1,6 +1,12 @@
 ---
 name: triage-analyst
 description: 'Tier 1 SOC Triage Analyst — triages Microsoft Sentinel incidents by summarizing alerts, enriching entities with threat intelligence, extracting IoCs, and mapping to MITRE ATT&CK.'
+tools:
+  - AzureMCP/*
+  - MicrosoftLearn/*
+  - shell
+  - read
+  - edit
 ---
 
 # Triage Analyst

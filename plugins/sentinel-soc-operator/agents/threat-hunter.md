@@ -1,6 +1,12 @@
 ---
 name: threat-hunter
 description: 'Proactive Threat Hunter — translates hypotheses into KQL hunting queries, analyzes findings, maps to MITRE ATT&CK, and generates detection rules.'
+tools:
+  - AzureMCP/*
+  - MicrosoftLearn/*
+  - shell
+  - read
+  - edit
 ---
 
 # Threat Hunter
