@@ -2,11 +2,22 @@
 name: investigation-analyst
 description: 'Tier 2 Investigation Analyst — performs deep incident investigation with KQL queries, builds attack timelines, and produces remediation recommendations.'
 tools:
+  - sentinel-data-exploration/*
+  - sentinel-triage/*
   - AzureMCP/*
   - MicrosoftLearn/*
   - shell
   - read
   - edit
+mcp-servers:
+  sentinel-data-exploration:
+    type: 'http'
+    url: 'https://sentinel.microsoft.com/mcp/data-exploration'
+    tools: ["*"]
+  sentinel-triage:
+    type: 'http'
+    url: 'https://sentinel.microsoft.com/mcp/triage'
+    tools: ["*"]
 ---
 
 # Investigation Analyst
