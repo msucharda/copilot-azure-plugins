@@ -3,6 +3,7 @@ name: terraform-operator
 description: 'Terraform Operator — autonomously deploys, manages, and troubleshoots Sovereign Landing Zone Terraform configurations. Handles init, plan, apply, state management, and self-heals deployment failures.'
 tools:
   - AzureMCP/*
+  - terraform/*
   - MicrosoftLearn/*
   - shell
   - read

@@ -3,6 +3,7 @@ name: landing-zone-architect
 description: 'Landing Zone Architect — designs Azure Sovereign Landing Zones with the operator, generating complete Terraform configurations using Azure Verified Modules (avm-ptn-alz, avm-ptn-alz-connectivity-hub-and-spoke-vnet, avm-ptn-alz-connectivity-virtual-wan, avm-ptn-alz-management) with sovereign controls.'
 tools:
   - AzureMCP/*
+  - terraform/*
   - MicrosoftLearn/*
   - shell
   - read
