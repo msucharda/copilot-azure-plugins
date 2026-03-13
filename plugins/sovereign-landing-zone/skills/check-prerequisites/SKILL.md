@@ -72,9 +72,10 @@ Verify that all prerequisites for the ALZ Accelerator bootstrap are met before s
 
    **GitHub**:
    - Organization account exists (not personal)
-   - Fine-grained PAT created with required permissions:
-     - Repository: Actions, Administration, Contents, Environments, Secrets, Variables, Workflows (R/W)
-     - Organization: Members (R/W)
+   - **Recommended: Use a classic PAT** — classic tokens work more reliably with the ALZ Accelerator than fine-grained PATs. Required scopes: `repo`, `workflow`, `admin:org`, `read:user`, `delete_repo`
+   - If using fine-grained PATs instead, **you must also add** `Account permissions → Email addresses → Read` — without this, the Terraform GitHub provider's `data "github_organization"` data source fails
+   - Fine-grained PAT repository permissions: Actions, Administration, Contents, Environments, Secrets, Variables, Workflows (R/W)
+   - Fine-grained PAT organization permissions: Members (R/W)
    - Optional second PAT for self-hosted runners (Administration R/W, Self-hosted runners R/W)
 
    **Azure DevOps**:

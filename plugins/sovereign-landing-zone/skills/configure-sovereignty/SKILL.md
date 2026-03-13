@@ -38,21 +38,28 @@ Configure and manage the sovereign controls that differentiate a Sovereign Landi
    library_references = {
      alz = {
        path = "platform/alz"
-       ref  = "2025.02.0"
+       ref  = "2026.01.2"  # verify via get_latest_module_version
      }
      slz = {
        path    = "platform/slz"
-       ref     = "2025.02.0"
+       ref     = "2026.02.1"  # verify via get_latest_module_version
        depends = ["alz"]
      }
    }
    ```
 
+   The SLZ library assigns sovereign policies automatically:
+   - `Enforce-Sovereign-Global` — assigned at the root MG (`slz`), enforces data residency and encryption globally
+   - `Enforce-Sovereign-Conf` — assigned at `confidential_corp` and `confidential_online` MGs, enforces CMK and confidential computing
+
+   **⚠️ Do NOT reference**: `Deny-Resource-Locations` or `Deny-RSG-Locations` — these policy names do not exist in the SLZ/ALZ library.
+
 3. **Configure allowed locations** (data residency):
    ```hcl
-   # Policy defaults override for allowed locations
-   policy_defaults_overrides = {
-     allowed_locations = var.allowed_locations  # e.g., ["westeurope", "northeurope"]
+   # In the avm-ptn-alz module configuration
+   policy_default_values = {
+     allowed_locations          = var.allowed_locations  # e.g., ["swedencentral"]
+     log_analytics_workspace_id = module.management.log_analytics_workspace.id
    }
    ```
 

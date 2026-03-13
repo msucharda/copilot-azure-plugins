@@ -91,21 +91,25 @@ The following tools are available through integrations:
 
 ### Phase 2: Design
 
-5. **Design management group hierarchy**: Use `design-management-groups` to create the hierarchy. Follow the CAF recommended structure:
+5. **Design management group hierarchy**: Use `design-management-groups` to create the hierarchy. The SLZ library defines **fixed management group IDs** — do not prefix them with an organization name:
    ```
    Tenant Root Group
-   └── Organization
-       ├── Platform
-       │   ├── Management
-       │   ├── Connectivity
-       │   └── Identity
-       ├── Landing Zones
-       │   ├── Corp
-       │   └── Online
-       ├── Sandbox
-       └── Decommissioned
+   └── slz
+       ├── platform
+       │   ├── management
+       │   ├── connectivity
+       │   ├── identity
+       │   └── security
+       ├── landingzones
+       │   ├── corp
+       │   ├── online
+       │   └── public
+       ├── confidential_corp
+       ├── confidential_online
+       ├── sandbox
+       └── decommissioned
    ```
-   Customize based on the operator's organizational needs. The SLZ library (`platform/slz`) adds sovereign policy sets to this hierarchy.
+   Customize by adding child MGs under `corp`/`online` for business units or environments. Do not rename or re-ID the library-defined MGs.
 
 6. **Design networking topology**: Use `design-networking` to plan the network:
    - For **vWAN**: Define vWAN hubs per region, ExpressRoute/VPN connections, routing intent

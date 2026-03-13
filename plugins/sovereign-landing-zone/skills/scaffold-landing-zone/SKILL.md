@@ -63,14 +63,24 @@ Generate a complete, production-ready Terraform project for deploying an Azure S
      library_references = {
        alz = {
          path = "platform/alz"
-         ref  = "2025.02.0"
+         ref  = "2026.01.2"  # verify via get_latest_module_version
        }
        slz = {
          path    = "platform/slz"
-         ref     = "2025.02.0"
+         ref     = "2026.02.1"  # verify via get_latest_module_version
          depends = ["alz"]
        }
      }
+
+     # REQUIRED: pass workspace ID so monitoring policies can reference it
+     policy_default_values = {
+       log_analytics_workspace_id = module.management.log_analytics_workspace.id
+     }
+
+     # Use policy_assignments_dependencies (NOT management_groups_dependencies)
+     policy_assignments_dependencies = [
+       module.management
+     ]
    }
    ```
 

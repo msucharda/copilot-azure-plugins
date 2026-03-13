@@ -18,20 +18,26 @@ Design the management group hierarchy that forms the governance backbone of the 
 
 ## Instructions
 
-1. **Start with the CAF reference architecture**: The Cloud Adoption Framework recommends this baseline hierarchy:
+1. **Start with the CAF reference architecture**: The Cloud Adoption Framework recommends this baseline hierarchy. **The SLZ library defines fixed management group IDs** — do not use custom prefixed IDs (e.g., `contoso-landingzones`). Use the IDs exactly as defined by the library:
    ```
    Tenant Root Group
-   └── {Organization}
-       ├── Platform
-       │   ├── Management          → Log Analytics, Automation, Monitoring
-       │   ├── Connectivity        → Hub networking, DNS, ExpressRoute
-       │   └── Identity            → Domain Controllers, Entra Connect
-       ├── Landing Zones
-       │   ├── Corp                → Internal workloads (connected to hub)
-       │   └── Online              → Internet-facing workloads (DMZ)
-       ├── Sandbox                 → Dev/test (relaxed policies)
-       └── Decommissioned          → Retired subscriptions
+   └── slz                         (root — Enforce-Sovereign-Global policy)
+       ├── platform
+       │   ├── management          → Log Analytics, Automation, Monitoring
+       │   ├── connectivity        → Hub networking, DNS, ExpressRoute
+       │   ├── identity            → Domain Controllers, Entra Connect
+       │   └── security            → Sentinel, security resources
+       ├── landingzones
+       │   ├── corp                → Internal workloads (connected to hub)
+       │   ├── online              → Internet-facing workloads (DMZ)
+       │   └── public              → Public-facing, no connectivity restrictions
+       ├── confidential_corp       → CMK + Confidential Computing enforced (Enforce-Sovereign-Conf)
+       ├── confidential_online     → CMK + Confidential Computing enforced (Enforce-Sovereign-Conf)
+       ├── sandbox                 → Dev/test (relaxed policies)
+       └── decommissioned          → Retired subscriptions
    ```
+
+   **⚠️ CRITICAL**: The SLZ library uses these exact IDs — `slz`, `platform`, `management`, `connectivity`, `identity`, `security`, `landingzones`, `corp`, `online`, `public`, `confidential_corp`, `confidential_online`, `sandbox`, `decommissioned`. Do NOT prefix them with an organization name. The `avm-ptn-alz` module reads these IDs from the library's architecture definition.
 
 2. **Customize for the organization**: Ask the operator:
    - Do you need separate management groups per business unit under Landing Zones?
@@ -54,13 +60,19 @@ Design the management group hierarchy that forms the governance backbone of the 
    - Identity subscription → Platform/Identity
    - Workload subscriptions → Landing Zones/Corp or Landing Zones/Online
 
-5. **Configure policy assignments**: The SLZ library provides policy sets for:
-   - Allowed locations (data residency enforcement)
-   - Customer-managed keys (CMK enforcement)
-   - Encryption requirements (at-rest and in-transit)
-   - Confidential computing (if enabled)
+5. **Configure policy assignments**: The SLZ library provides sovereign policy sets. **Use the actual SLZ policy names** — do NOT reference non-existent policies:
+
+   | SLZ Policy | Scope | Purpose |
+   |------------|-------|---------|
+   | `Enforce-Sovereign-Global` | Root MG (`slz`) | Data residency, encryption, diagnostic settings |
+   | `Enforce-Sovereign-Conf` | `confidential_corp`, `confidential_online` | CMK enforcement, confidential computing |
+
+   Other policy sets inherited from the ALZ library:
    - Diagnostic settings (centralized logging)
-   - Network security (NSG requirements, no public IPs)
+   - Network security (NSG requirements)
+   - Encryption requirements (at-rest and in-transit)
+
+   **⚠️ Do NOT use**: `Deny-Resource-Locations`, `Deny-RSG-Locations` — these do not exist in the SLZ/ALZ library. Data residency is enforced through `Enforce-Sovereign-Global`.
 
 6. **Generate the Terraform configuration**: Produce the `management-groups.tf` file with the complete `avm-ptn-alz` module declaration including all management groups, policy assignments, and subscription placements.
 
