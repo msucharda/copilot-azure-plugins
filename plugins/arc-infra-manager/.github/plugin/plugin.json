@@ -1,7 +1,7 @@
 {
   "name": "arc-infra-manager",
   "description": "Copilot CLI plugin for Azure Arc infrastructure operators covering fleet inventory, health monitoring, remote operations, patch management, compliance auditing, and reporting for hybrid Windows and Linux servers.",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": {
     "name": "msucharda",
     "url": "https://github.com/msucharda"
@@ -9,6 +9,24 @@
   "repository": "https://github.com/msucharda/copilot-azure-plugins",
   "license": "MIT",
   "keywords": ["azure-arc", "hybrid-cloud", "infrastructure", "server-management", "compliance", "patching", "windows", "linux"],
+  "prerequisites": {
+    "description": "This plugin is enhanced by the azure-skills plugin from the Microsoft skills marketplace. Install it for compliance scanning (azqr), cross-subscription resource discovery, Azure Monitor observability, cost optimization, RBAC auditing, and architecture visualization. Without azure-skills, core Arc operations (inventory, health, extensions, patching, compliance) still work.",
+    "recommended": [
+      {
+        "plugin": "azure-skills",
+        "source": "microsoft",
+        "install": "/plugin install azure@azure-skills",
+        "skills_used": [
+          "azure-compliance",
+          "azure-observability",
+          "azure-resource-lookup",
+          "azure-cost-optimization",
+          "azure-rbac",
+          "azure-resource-visualizer"
+        ]
+      }
+    ]
+  },
   "agents": "agents/",
   "skills": [
     "./skills/inventory-servers",
