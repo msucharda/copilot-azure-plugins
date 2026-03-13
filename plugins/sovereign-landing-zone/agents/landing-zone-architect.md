@@ -1,6 +1,6 @@
 ---
 name: landing-zone-architect
-description: 'Landing Zone Architect — designs Azure Sovereign Landing Zones with the operator, generating complete Terraform configurations using Azure Verified Modules (avm-ptn-alz, avm-ptn-hubnetworking, avm-ptn-alz-management) with sovereign controls.'
+description: 'Landing Zone Architect — designs Azure Sovereign Landing Zones with the operator, generating complete Terraform configurations using Azure Verified Modules (avm-ptn-alz, avm-ptn-alz-connectivity-hub-and-spoke-vnet, avm-ptn-alz-connectivity-virtual-wan, avm-ptn-alz-management) with sovereign controls.'
 tools:
   - AzureMCP/*
   - MicrosoftLearn/*
@@ -37,7 +37,7 @@ You are opinionated: you recommend vWAN for organizations with multiple regions 
 
 - `scaffold-landing-zone` — Generate complete AVM-based Terraform configurations for a new SLZ
 - `design-management-groups` — Interactive design of management group hierarchy with avm-ptn-alz
-- `design-networking` — Design hub/vWAN networking topology with avm-ptn-hubnetworking
+- `design-networking` — Design hub/vWAN networking topology with avm-ptn-alz-connectivity-hub-and-spoke-vnet or avm-ptn-alz-connectivity-virtual-wan
 - `configure-sovereignty` — Apply sovereign controls (data residency, CMK, confidential computing policies)
 - `generate-tfvars` — Generate terraform.tfvars from operator requirements
 
@@ -126,7 +126,7 @@ The following tools are available through the Azure MCP integration:
    ├── locals.tf                   # Local values and computations
    ├── modules/
    │   ├── management-groups.tf    # avm-ptn-alz module
-   │   ├── networking.tf           # avm-ptn-hubnetworking module
+   │   ├── networking.tf           # avm-ptn-alz-connectivity-* module
    │   ├── management.tf           # avm-ptn-alz-management module
    │   └── sovereignty.tf          # SLZ-specific policy configurations
    └── README.md                   # Deployment documentation
@@ -171,10 +171,10 @@ These are the primary AVM modules used in SLZ deployments:
 | Module | Registry Path | Purpose |
 |--------|--------------|---------|
 | ALZ Pattern | `Azure/avm-ptn-alz/azurerm` | Management groups, policy assignments, role definitions |
-| Hub Networking | `Azure/avm-ptn-hubnetworking/azurerm` | Hub VNets, Azure Firewall, VPN/ER gateways |
+| Hub & Spoke Networking | `Azure/avm-ptn-alz-connectivity-hub-and-spoke-vnet/azurerm` | Hub VNets, Azure Firewall, VPN/ER gateways |
 | ALZ Management | `Azure/avm-ptn-alz-management/azurerm` | Log Analytics, DCRs, automation |
 | Virtual Network | `Azure/avm-res-network-virtualnetwork/azurerm` | Spoke VNets with NSGs, UDRs |
-| Virtual WAN | `Azure/avm-ptn-virtualwan/azurerm` | vWAN hubs, connections, routing |
+| Virtual WAN | `Azure/avm-ptn-alz-connectivity-virtual-wan/azurerm` | vWAN hubs, connections, routing |
 
 ## Azure Landing Zone Library
 
@@ -185,3 +185,10 @@ The SLZ uses the Azure Landing Zone Library (`platform/slz`) which provides:
 - Dependency on the base ALZ library (`platform/alz`) for standard landing zone policies
 
 Reference: https://github.com/Azure/Azure-Landing-Zones-Library/tree/main/platform/slz
+
+## Official Resources
+
+- **Azure Landing Zones documentation site**: https://azure.github.io/Azure-Landing-Zones/ — Technical guidance for deploying and managing Azure Landing Zones, including bootstrap, Terraform, and Accelerator workflows.
+- **ALZ IaC Accelerator**: https://azure.github.io/Azure-Landing-Zones/accelerator/ — Recommended approach for most customers. Bootstraps a CI/CD environment with GitHub Actions or Azure DevOps pipelines using the AVM modules listed above.
+- **AVM for Platform Landing Zone (Terraform)**: https://azure.github.io/Azure-Landing-Zones/terraform/ — Integration documentation for using the AVM pattern modules together.
+- **Azure Landing Zones Library**: https://azure.github.io/Azure-Landing-Zones-Library/ — Reference management group and policy structure.

@@ -1,6 +1,6 @@
 ---
 name: design-networking
-description: 'Design hub-spoke or Virtual WAN networking topology for the Sovereign Landing Zone using avm-ptn-hubnetworking and avm-ptn-virtualwan modules.'
+description: 'Design hub-spoke or Virtual WAN networking topology for the Sovereign Landing Zone using avm-ptn-alz-connectivity-hub-and-spoke-vnet and avm-ptn-alz-connectivity-virtual-wan modules.'
 ---
 
 # Design Networking
@@ -59,10 +59,10 @@ Design the networking topology for the Sovereign Landing Zone, supporting both h
 
 3. **Configure the networking module**:
 
-   **For Hub-Spoke** — Use `avm-ptn-hubnetworking`:
+   **For Hub-Spoke** — Use `avm-ptn-alz-connectivity-hub-and-spoke-vnet`:
    ```hcl
    module "hubnetworking" {
-     source  = "Azure/avm-ptn-hubnetworking/azurerm"
+     source  = "Azure/avm-ptn-alz-connectivity-hub-and-spoke-vnet/azurerm"
      version = "~> 0.8"
 
      hub_virtual_networks = {
@@ -90,10 +90,10 @@ Design the networking topology for the Sovereign Landing Zone, supporting both h
    }
    ```
 
-   **For vWAN** — Use `avm-ptn-virtualwan`:
+   **For vWAN** — Use `avm-ptn-alz-connectivity-virtual-wan`:
    ```hcl
    module "vwan" {
-     source  = "Azure/avm-ptn-virtualwan/azurerm"
+     source  = "Azure/avm-ptn-alz-connectivity-virtual-wan/azurerm"
      version = "~> 0.8"
 
      resource_group_name         = "rg-connectivity-vwan"

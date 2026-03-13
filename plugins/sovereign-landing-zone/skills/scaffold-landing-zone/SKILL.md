@@ -36,7 +36,7 @@ Generate a complete, production-ready Terraform project for deploying an Azure S
    ├── providers.tf                     # AzureRM provider + backend configuration
    ├── locals.tf                        # Computed values, naming conventions
    ├── management-groups.tf             # avm-ptn-alz module declaration
-   ├── networking.tf                    # avm-ptn-hubnetworking or vWAN module
+   ├── networking.tf                    # avm-ptn-alz-connectivity-hub-and-spoke-vnet or virtual-wan module
    ├── management.tf                    # avm-ptn-alz-management module
    ├── sovereignty.tf                   # SLZ library references and policy overrides
    ├── versions.tf                      # Required providers and version constraints
@@ -69,10 +69,10 @@ Generate a complete, production-ready Terraform project for deploying an Azure S
    }
    ```
 
-   **Hub Networking (avm-ptn-hubnetworking)**:
+   **Hub & Spoke Networking (avm-ptn-alz-connectivity-hub-and-spoke-vnet)**:
    ```hcl
    module "hubnetworking" {
-     source  = "Azure/avm-ptn-hubnetworking/azurerm"
+     source  = "Azure/avm-ptn-alz-connectivity-hub-and-spoke-vnet/azurerm"
      version = "~> 0.8"
 
      hub_virtual_networks = {
