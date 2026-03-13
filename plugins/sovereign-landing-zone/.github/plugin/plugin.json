@@ -1,7 +1,7 @@
 {
   "name": "sovereign-landing-zone",
   "description": "Copilot CLI plugin for designing and deploying Azure Sovereign Landing Zones using Azure Verified Modules (AVM) Terraform modules. Features autonomous Terraform operations, sovereign compliance controls (data residency, CMK, confidential computing), and hub/vWAN networking \u2014 all built on avm-ptn-alz, avm-ptn-alz-connectivity-hub-and-spoke-vnet, avm-ptn-alz-connectivity-virtual-wan, and avm-ptn-alz-management. Based on https://azure.github.io/Azure-Landing-Zones/",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": {
     "name": "msucharda",
     "url": "https://github.com/msucharda"
@@ -21,7 +21,7 @@
     "hub-spoke"
   ],
   "prerequisites": {
-    "description": "This plugin requires Terraform CLI (>=1.9) and Azure CLI (az) with an authenticated session. It is enhanced by the azure-skills plugin from the Microsoft skills marketplace for compliance scanning, cost optimization, RBAC auditing, and architecture visualization.",
+    "description": "This plugin requires Terraform CLI (>=1.9), Azure CLI (az), and PowerShell 7.4+ (for ALZ Accelerator bootstrap) with an authenticated session. It is enhanced by the azure-skills plugin from the Microsoft skills marketplace for compliance scanning, cost optimization, RBAC auditing, and architecture visualization.",
     "required": [
       {
         "tool": "terraform",
@@ -30,8 +30,13 @@
       },
       {
         "tool": "az",
-        "version": ">=2.60",
+        "version": ">=2.55",
         "install": "https://learn.microsoft.com/en-us/cli/azure/install-azure-cli"
+      },
+      {
+        "tool": "pwsh",
+        "version": ">=7.4",
+        "install": "https://learn.microsoft.com/powershell/scripting/install/installing-powershell"
       }
     ],
     "recommended": [
@@ -60,6 +65,9 @@
     "./skills/validate-deployment",
     "./skills/troubleshoot-deployment",
     "./skills/deploy-management",
-    "./skills/generate-tfvars"
+    "./skills/generate-tfvars",
+    "./skills/check-prerequisites",
+    "./skills/bootstrap-accelerator",
+    "./skills/configure-platform"
   ]
 }

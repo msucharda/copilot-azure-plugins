@@ -1,0 +1,148 @@
+---
+name: bootstrap-accelerator
+description: 'Generate inputs.yaml configuration and run the ALZ PowerShell Deploy-Accelerator command to bootstrap CI/CD environment for the Sovereign Landing Zone.'
+---
+
+# Bootstrap Accelerator
+
+## Purpose
+
+Generate the bootstrap configuration file (`inputs.yaml`) and execute the ALZ Accelerator bootstrap using the ALZ PowerShell module. The bootstrap creates the foundational CI/CD infrastructure: Terraform state storage, managed identities, VCS repositories with pipelines, and RBAC assignments. This is a one-time setup that enables all subsequent landing zone deployments through CI/CD.
+
+## When to Use
+
+- Setting up a new Sovereign Landing Zone environment from scratch
+- The operator has completed prerequisites (tools, subscriptions, permissions, VCS)
+- Moving from manual Terraform operations to CI/CD-driven deployment
+- Rebuilding the bootstrap environment after cleanup
+
+## Instructions
+
+1. **Collect bootstrap inputs**: Gather the following from the operator:
+
+   | Input | Description | Example |
+   |-------|-------------|---------|
+   | `iac_type` | Infrastructure as Code tool | `terraform` |
+   | `bootstrap_module_name` | VCS bootstrap module | `alz_github`, `alz_azuredevops`, `alz_local` |
+   | `starter_module_name` | Starter module name | `platform_landing_zone` |
+   | `bootstrap_location` | Azure region for bootstrap resources | `uksouth` |
+   | `subscription_ids` | Map of platform subscription IDs | `{management: "<guid>", identity: "<guid>", connectivity: "<guid>", security: "<guid>"}` |
+   | `bootstrap_subscription_id` | Subscription for state storage | `<guid>` (usually same as management) |
+   | `service_name` | Short name for resources | `alz` |
+   | `environment_name` | Environment identifier | `mgmt` |
+   | `postfix_number` | Numeric postfix for uniqueness | `1` |
+   | `root_parent_management_group_id` | Parent MG for ALZ hierarchy | `""` (Tenant Root) |
+
+   **For GitHub VCS**, also collect:
+   | Input | Description |
+   |-------|-------------|
+   | `github_personal_access_token` | PAT token-1 |
+   | `github_runners_personal_access_token` | PAT token-2 (if self-hosted runners) |
+   | `github_organization_name` | GitHub org name |
+   | `use_self_hosted_runners` | `true` or `false` |
+   | `use_private_networking` | `true` or `false` |
+
+   **For Azure DevOps VCS**, also collect:
+   | Input | Description |
+   |-------|-------------|
+   | `azure_devops_personal_access_token` | ADO PAT |
+   | `azure_devops_organization_name` | ADO org name |
+   | `azure_devops_project_name` | Project name (existing or new) |
+
+2. **Create folder structure**: Run in PowerShell:
+   ```powershell
+   $iacType = "terraform"
+   $versionControl = "<github|azure-devops|local>"
+   $scenarioNumber = 1  # Default sovereign scenario
+   $targetFolderPath = "~/accelerator"
+
+   New-AcceleratorFolderStructure `
+       -iacType $iacType `
+       -versionControl $versionControl `
+       -scenarioNumber $scenarioNumber `
+       -targetFolderPath $targetFolderPath
+   ```
+
+3. **Generate inputs.yaml**: Create the bootstrap configuration file at `$targetFolderPath/config/inputs.yaml`:
+   ```yaml
+   # ALZ Accelerator Bootstrap Configuration
+   # Generated for Sovereign Landing Zone deployment
+
+   iac_type: "terraform"
+   bootstrap_module_name: "<alz_github|alz_azuredevops|alz_local>"
+   starter_module_name: "platform_landing_zone"
+   bootstrap_location: "<region>"
+
+   # Subscriptions
+   bootstrap_subscription_id: "<management-sub-id>"
+   subscription_ids:
+     management: "<management-sub-id>"
+     identity: "<identity-sub-id>"
+     connectivity: "<connectivity-sub-id>"
+     security: "<security-sub-id>"
+
+   # Naming
+   service_name: "alz"
+   environment_name: "mgmt"
+   postfix_number: 1
+
+   # Management Groups
+   root_parent_management_group_id: ""  # Empty = Tenant Root Group
+
+   # VCS-specific settings
+   # (GitHub or Azure DevOps fields here)
+   ```
+
+4. **Verify Azure login**: Ensure the operator is logged in to the correct tenant and subscription:
+   ```bash
+   az login --tenant "<tenant-id>"
+   az account set --subscription "<bootstrap-subscription-id>"
+   az account show
+   ```
+
+5. **Run Deploy-Accelerator**: Execute the bootstrap in advanced mode:
+   ```powershell
+   Deploy-Accelerator `
+       -inputs "$targetFolderPath/config/inputs.yaml", "$targetFolderPath/config/platform-landing-zone.tfvars" `
+       -starterAdditionalFiles "$targetFolderPath/config/lib" `
+       -output "$targetFolderPath/output"
+   ```
+
+   The command will:
+   - Validate the configuration
+   - Generate a Terraform plan for the bootstrap infrastructure
+   - Prompt for confirmation before applying
+   - Create all bootstrap resources
+
+6. **Verify bootstrap output**: After successful execution, verify:
+   ```bash
+   # Check state storage was created
+   az storage account list --resource-group "rg-<service_name>-<environment_name>-state-<region>-<postfix>" -o table
+
+   # Check managed identities were created
+   az identity list --resource-group "rg-<service_name>-<environment_name>-identity-<region>-<postfix>" -o table
+   ```
+
+7. **Record bootstrap outputs**: Capture and save:
+   - State storage account name and container
+   - UAMI resource IDs (plan and apply identities)
+   - VCS repository URL
+   - Pipeline/Action URLs
+   - Output directory path
+
+## Input
+
+- **Required**: All fields from the inputs table in step 1
+- **Required**: Platform landing zone configuration (from `configure-platform` skill)
+- **Optional**: Custom starter module overrides
+
+## Output
+
+A bootstrapped CI/CD environment with:
+- Terraform state storage (Resource Group + Storage Account + Container)
+- Managed identities with federated credentials
+- VCS repository with starter module and CI/CD pipelines
+- Branch policies and approval gates
+- A summary report with all resource IDs and URLs for the operator
+
+Reference: https://azure.github.io/Azure-Landing-Zones/accelerator/2_bootstrap/
