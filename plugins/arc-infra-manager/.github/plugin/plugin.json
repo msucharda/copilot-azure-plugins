@@ -1,7 +1,7 @@
 {
   "name": "arc-infra-manager",
   "description": "Copilot CLI plugin for Azure Arc infrastructure operators covering fleet inventory, health monitoring, remote operations, patch management, compliance auditing, and reporting for hybrid Windows and Linux servers.",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": {
     "name": "msucharda",
     "url": "https://github.com/msucharda"
@@ -9,9 +9,7 @@
   "repository": "https://github.com/msucharda/copilot-azure-plugins",
   "license": "MIT",
   "keywords": ["azure-arc", "hybrid-cloud", "infrastructure", "server-management", "compliance", "patching", "windows", "linux"],
-  "agents": [
-    "./agents"
-  ],
+  "agents": "agents/",
   "skills": [
     "./skills/inventory-servers",
     "./skills/check-health",
