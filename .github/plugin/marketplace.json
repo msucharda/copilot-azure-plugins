@@ -1,0 +1,40 @@
+{
+  "name": "copilot-azure-plugins",
+  "metadata": {
+    "description": "Copilot CLI plugin marketplace for Azure operators — Arc infrastructure management, Sovereign Landing Zones, and more",
+    "version": "1.0.0",
+    "pluginRoot": "./plugins"
+  },
+  "owner": {
+    "name": "msucharda",
+    "url": "https://github.com/msucharda"
+  },
+  "plugins": [
+    {
+      "name": "arc-infra-manager",
+      "source": "arc-infra-manager",
+      "description": "Copilot CLI plugin for Azure Arc infrastructure operators covering fleet inventory, health monitoring, remote operations, patch management, compliance auditing, and reporting for hybrid Windows and Linux servers.",
+      "version": "2.1.0",
+      "author": {
+        "name": "msucharda",
+        "url": "https://github.com/msucharda"
+      },
+      "keywords": ["azure-arc", "hybrid-cloud", "infrastructure", "server-management", "compliance", "patching", "windows", "linux"],
+      "license": "MIT",
+      "repository": "https://github.com/msucharda/copilot-azure-plugins"
+    },
+    {
+      "name": "sovereign-landing-zone",
+      "source": "sovereign-landing-zone",
+      "description": "Copilot CLI plugin for designing and deploying Azure Sovereign Landing Zones using Azure Verified Modules (AVM) Terraform modules. Features autonomous Terraform operations, sovereign compliance controls, and hub/vWAN networking.",
+      "version": "1.0.0",
+      "author": {
+        "name": "msucharda",
+        "url": "https://github.com/msucharda"
+      },
+      "keywords": ["azure", "sovereign-landing-zone", "terraform", "azure-verified-modules", "landing-zone", "infrastructure-as-code", "compliance", "data-residency", "vwan", "hub-spoke"],
+      "license": "MIT",
+      "repository": "https://github.com/msucharda/copilot-azure-plugins"
+    }
+  ]
+}
