@@ -1,0 +1,64 @@
+{
+  "name": "sovereign-landing-zone",
+  "description": "Copilot CLI plugin for designing and deploying Azure Sovereign Landing Zones using Azure Verified Modules (AVM) Terraform modules. Features autonomous Terraform operations, sovereign compliance controls (data residency, CMK, confidential computing), and hub/vWAN networking — all built on avm-ptn-alz, avm-ptn-hubnetworking, and avm-ptn-alz-management.",
+  "version": "1.0.0",
+  "author": {
+    "name": "msucharda",
+    "url": "https://github.com/msucharda"
+  },
+  "repository": "https://github.com/msucharda/copilot-azure-plugins",
+  "license": "MIT",
+  "keywords": [
+    "azure",
+    "sovereign-landing-zone",
+    "terraform",
+    "azure-verified-modules",
+    "landing-zone",
+    "infrastructure-as-code",
+    "compliance",
+    "data-residency",
+    "vwan",
+    "hub-spoke"
+  ],
+  "prerequisites": {
+    "description": "This plugin requires Terraform CLI (>=1.9) and Azure CLI (az) with an authenticated session. It is enhanced by the azure-skills plugin from the Microsoft skills marketplace for compliance scanning, cost optimization, RBAC auditing, and architecture visualization.",
+    "required": [
+      {
+        "tool": "terraform",
+        "version": ">=1.9",
+        "install": "https://developer.hashicorp.com/terraform/install"
+      },
+      {
+        "tool": "az",
+        "version": ">=2.60",
+        "install": "https://learn.microsoft.com/en-us/cli/azure/install-azure-cli"
+      }
+    ],
+    "recommended": [
+      {
+        "plugin": "azure-skills",
+        "source": "microsoft",
+        "install": "/plugin install azure@azure-skills",
+        "skills_used": [
+          "azure-compliance",
+          "azure-observability",
+          "azure-resource-lookup",
+          "azure-cost-optimization",
+          "azure-rbac",
+          "azure-resource-visualizer"
+        ]
+      }
+    ]
+  },
+  "agents": "agents/",
+  "skills": [
+    "./skills/scaffold-landing-zone",
+    "./skills/design-management-groups",
+    "./skills/design-networking",
+    "./skills/configure-sovereignty",
+    "./skills/deploy-landing-zone",
+    "./skills/validate-deployment",
+    "./skills/troubleshoot-deployment",
+    "./skills/generate-tfvars"
+  ]
+}
