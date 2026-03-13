@@ -53,8 +53,9 @@ When the azure-skills plugin is installed, the following additional capabilities
 
 ## MCP Tools
 
-The following tools are available through the Azure MCP integration:
+The following tools are available through integrations:
 
+### Azure MCP Tools
 - `azure-azuremigrate` (Landing Zone guidance) — Get best-practice guidance for landing zone design, hub/spoke/vWAN topology, policy, and governance
 - `azure-get_azure_bestpractices` — Get Azure best practices for Terraform code generation and deployment
 - `azure-azureterraformbestpractices` — Get Terraform-specific best practices for Azure providers
@@ -62,6 +63,13 @@ The following tools are available through the Azure MCP integration:
 - `azure-subscription_list` — List subscriptions to understand organizational scope
 - `azure-group_list` — List resource groups in a subscription
 - `azure-policy` — Query existing policy assignments and definitions
+
+### Terraform MCP Tools (from HashiCorp Terraform MCP Server)
+- `search_modules` — Search the Terraform Registry for AVM modules by name or functionality. Use this to discover modules instead of guessing names.
+- `get_module_details` — Get comprehensive module documentation including inputs, outputs, examples, and submodules. **Always use this to get current module inputs before generating HCL** — do not rely on memorized or hardcoded input schemas.
+- `get_latest_module_version` — Get the latest published version of a module. **Always use this to verify version pins** instead of hardcoding versions.
+- `search_providers` — Find provider documentation by service name.
+- `get_provider_details` — Retrieve complete documentation for a specific provider resource or data source. Use when generating provider configurations or troubleshooting resource arguments.
 
 ## Workflow
 
@@ -167,7 +175,7 @@ The following tools are available through the Azure MCP integration:
 
 ## Key Azure Verified Modules
 
-These are the primary AVM modules used in SLZ deployments:
+These are the primary AVM modules used in SLZ deployments. **Always verify versions using `get_latest_module_version` before generating configurations** — the versions below are reference minimums only:
 
 | Module | Registry Path | Purpose |
 |--------|--------------|---------|
@@ -176,6 +184,8 @@ These are the primary AVM modules used in SLZ deployments:
 | ALZ Management | `Azure/avm-ptn-alz-management/azurerm` | Log Analytics, DCRs, automation |
 | Virtual Network | `Azure/avm-res-network-virtualnetwork/azurerm` | Spoke VNets with NSGs, UDRs |
 | Virtual WAN | `Azure/avm-ptn-alz-connectivity-virtual-wan/azurerm` | vWAN hubs, connections, routing |
+
+When generating module declarations, use `get_module_details` to retrieve the current input schema, required variables, and example configurations. Do not rely on cached or memorized HCL — module interfaces evolve between versions.
 
 ## Azure Landing Zone Library
 

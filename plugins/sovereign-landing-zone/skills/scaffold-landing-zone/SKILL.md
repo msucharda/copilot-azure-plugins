@@ -45,11 +45,16 @@ Generate a complete, production-ready Terraform project for deploying an Azure S
 
 3. **Configure the AVM modules**:
 
-   **Management Groups (avm-ptn-alz)**:
+   **Before generating any module declaration**, use the Terraform MCP tools to get current documentation:
+   - Run `get_latest_module_version` for each module to get the current version
+   - Run `get_module_details` for each module to get the current input schema, required variables, and examples
+   - Do not rely on hardcoded HCL snippets — module interfaces change between versions
+
+   **Management Groups (avm-ptn-alz)** — version below is a reference minimum; replace with the result of `get_latest_module_version`:
    ```hcl
    module "alz" {
      source  = "Azure/avm-ptn-alz/azurerm"
-     version = "~> 0.11"
+     version = "~> 0.11"  # verify via get_latest_module_version
 
      architecture_definition_name = "slz"
      location                     = var.default_location
@@ -69,11 +74,11 @@ Generate a complete, production-ready Terraform project for deploying an Azure S
    }
    ```
 
-   **Hub & Spoke Networking (avm-ptn-alz-connectivity-hub-and-spoke-vnet)**:
+   **Hub & Spoke Networking (avm-ptn-alz-connectivity-hub-and-spoke-vnet)** — verify version via `get_latest_module_version`:
    ```hcl
    module "hubnetworking" {
      source  = "Azure/avm-ptn-alz-connectivity-hub-and-spoke-vnet/azurerm"
-     version = "~> 0.8"
+     version = "~> 0.8"  # verify via get_latest_module_version
 
      hub_virtual_networks = {
        primary = {
@@ -91,11 +96,11 @@ Generate a complete, production-ready Terraform project for deploying an Azure S
    }
    ```
 
-   **Management (avm-ptn-alz-management)**:
+   **Management (avm-ptn-alz-management)** — verify version via `get_latest_module_version`:
    ```hcl
    module "management" {
      source  = "Azure/avm-ptn-alz-management/azurerm"
-     version = "~> 0.7"
+     version = "~> 0.7"  # verify via get_latest_module_version
 
      location                       = var.default_location
      resource_group_name            = "rg-management-${var.default_location}"

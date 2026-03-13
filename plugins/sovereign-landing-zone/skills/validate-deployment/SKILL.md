@@ -80,6 +80,8 @@ Perform comprehensive pre-flight validation of the Sovereign Landing Zone Terraf
    terraform version
    ```
    
+   Use `get_latest_module_version` via the Terraform MCP server to check if newer versions of the AVM modules are available. Use `get_module_details` to verify that the current provider version meets each module's requirements.
+   
    Check that:
    - AzureRM provider version meets module requirements
    - AzAPI provider is included if required by newer AVM modules

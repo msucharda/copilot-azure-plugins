@@ -28,7 +28,7 @@ Diagnose Terraform deployment failures, identify root causes, apply fixes, and r
    - Azure error code (e.g., `AuthorizationFailed`, `QuotaExceeded`)
    - HTTP status code (403, 409, 429, etc.)
 
-2. **Classify the error**: Match against known patterns:
+2. **Classify the error**: Match against known patterns. When the error references a specific resource type or module argument, use `get_provider_details` or `get_module_details` via the Terraform MCP server to look up current documentation before attempting a fix.
 
    ### Permission Errors (403 / AuthorizationFailed)
    ```
@@ -112,8 +112,9 @@ Diagnose Terraform deployment failures, identify root causes, apply fixes, and r
    **Autonomous fix**:
    1. Check the required version: `grep -r "required_version" *.tf`
    2. Check current version: `terraform version`
-   3. Either upgrade Terraform or adjust module version constraints
-   4. Run `terraform init -upgrade` and retry
+   3. Use `get_latest_module_version` to find the latest published version of each module, then use `get_module_details` to check its `required_version` constraint against the current Terraform version before changing pins
+   4. Either upgrade Terraform or adjust module version constraints to a compatible version
+   5. Run `terraform init -upgrade` and retry
 
 3. **Apply fix and retry**: After applying the fix:
    ```bash

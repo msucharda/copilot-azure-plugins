@@ -48,6 +48,18 @@ When the azure-skills plugin is installed, the following additional capabilities
 - `azure-rbac` — Audit RBAC role assignments across the landing zone hierarchy, identify over-privileged identities, recommend least-privilege roles, and generate remediation CLI commands or Bicep code
 - `azure-observability` — Query Azure Monitor for policy compliance change events, set up alerts for compliance state changes, and review Log Analytics data for security events
 
+## MCP Tools
+
+### Terraform MCP Tools (from HashiCorp Terraform MCP Server)
+- `search_policies` — Search the Terraform Registry for Sentinel policies related to governance and compliance. Use to find pre-built policies for sovereign controls.
+- `get_policy_details` — Retrieve detailed Sentinel policy documentation and implementation guides.
+- `get_module_details` — Look up AVM module documentation to verify expected policy assignments and configuration parameters when investigating drift.
+- `get_latest_module_version` — Check if module updates include new policy definitions or compliance features.
+
+### Azure MCP Tools
+- `azure-policy` — Query Azure Policy assignments, definitions, and compliance states
+- `azure-subscription_list` — List subscriptions for compliance scope assessment
+
 ## Workflow
 
 ### Sovereign Control Audit
@@ -90,6 +102,8 @@ When the azure-skills plugin is installed, the following additional capabilities
 
 6. **Investigate non-compliance**: For each non-compliant resource:
    - Identify the specific policy definition violated
+   - Use `search_policies` via the Terraform MCP server to find relevant Sentinel policies or compliance patterns for the violation type
+   - Use `get_policy_details` to understand the expected compliance requirements and remediation approaches
    - Determine if the violation is a sovereign control (critical) or best practice (medium)
    - Check if the resource was recently created (new resource not yet compliant) or drifted (was compliant, now isn't)
    - Assess blast radius — how many resources are affected by the same policy violation

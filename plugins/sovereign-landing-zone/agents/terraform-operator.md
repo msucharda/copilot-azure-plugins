@@ -46,6 +46,19 @@ When the azure-skills plugin is installed, the following additional capabilities
 - `azure-resource-lookup` — Verify deployed resources match the expected state, discover resources across subscriptions for post-deployment validation
 - `azure-compliance` — Run post-deployment compliance scans to verify sovereign controls are properly applied
 
+## MCP Tools
+
+### Terraform MCP Tools (from HashiCorp Terraform MCP Server)
+- `get_module_details` — Look up AVM module inputs, outputs, and examples when debugging configuration errors. Use this instead of guessing module arguments.
+- `get_latest_module_version` — Check for module version updates that may fix known issues.
+- `get_provider_details` — Look up AzureRM provider resource documentation when diagnosing resource-level errors (required arguments, valid values, API versions).
+- `search_providers` — Find provider docs for unfamiliar resource types encountered in error messages.
+
+### Azure MCP Tools
+- `azure-subscription_list` — Verify subscription access and context
+- `azure-group_list` — Verify resource group existence
+- `azure-policy` — Query policy assignments blocking deployments
+
 ## Workflow
 
 ### Pre-Deployment Checks
