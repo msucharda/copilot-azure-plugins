@@ -33,6 +33,12 @@ Verify that all prerequisites for the ALZ Accelerator bootstrap are met before s
    code --version 2>/dev/null || echo "VS Code not installed (optional)"
    ```
 
+   Also check the ALZ PowerShell module:
+   ```powershell
+   pwsh -Command 'Get-InstalledPSResource -Name ALZ 2>$null | Select-Object -ExpandProperty Version'
+   ```
+   If not installed, it will be installed during the bootstrap. If installed, verify it's reasonably current.
+
    If any required tool is missing, provide installation instructions:
    - PowerShell: https://learn.microsoft.com/powershell/scripting/install/installing-powershell
    - Azure CLI: https://learn.microsoft.com/cli/azure/install-azure-cli
@@ -71,12 +77,12 @@ Verify that all prerequisites for the ALZ Accelerator bootstrap are met before s
 5. **Verify VCS prerequisites**: Based on the operator's chosen VCS:
 
    **GitHub**:
-   - Organization account exists (not personal)
+   - Organization account exists (not personal — free orgs are supported but repos will be public)
    - **Recommended: Use a classic PAT** — classic tokens work more reliably with the ALZ Accelerator than fine-grained PATs. Required scopes: `repo`, `workflow`, `admin:org`, `read:user`, `delete_repo`
    - If using fine-grained PATs instead, **you must also add** `Account permissions → Email addresses → Read` — without this, the Terraform GitHub provider's `data "github_organization"` data source fails
    - Fine-grained PAT repository permissions: Actions, Administration, Contents, Environments, Secrets, Variables, Workflows (R/W)
-   - Fine-grained PAT organization permissions: Members (R/W)
-   - Optional second PAT for self-hosted runners (Administration R/W, Self-hosted runners R/W)
+   - Fine-grained PAT organization permissions: Members (R/W), Self-hosted runners (R/W — only if using runner groups at the org level)
+   - Optional second PAT (token-2) for self-hosted runners — **only needed if** `use_self_hosted_runners: true`. Permissions: Repository Administration (R/W), Organization Self-hosted runners (R/W)
 
    **Azure DevOps**:
    - Organization and project exist
@@ -96,6 +102,7 @@ Verify that all prerequisites for the ALZ Accelerator bootstrap are met before s
    | PowerShell | >=7.4 | [version] | ✅/❌ |
    | Azure CLI | >=2.55 | [version] | ✅/❌ |
    | Git | any | [version] | ✅/❌ |
+   | ALZ Module | any | [version] | ✅/ℹ️ (installed during bootstrap if missing) |
    | VS Code | optional | [version] | ℹ️ |
 
    ### Azure

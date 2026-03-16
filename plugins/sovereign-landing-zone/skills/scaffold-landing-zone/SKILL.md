@@ -50,6 +50,8 @@ Generate a complete, production-ready Terraform project for deploying an Azure S
    - Run `get_module_details` for each module to get the current input schema, required variables, and examples
    - Do not rely on hardcoded HCL snippets — module interfaces change between versions
 
+   **⚠️ CRITICAL — .tfvars rule**: When generating `terraform.tfvars` or any `.tfvars` file, use **only literal HCL values** (strings, numbers, booleans, lists, maps). Terraform functions like `jsonencode()`, `tolist()`, `toset()`, `format()` are NOT supported in `.tfvars` files and cause `Error: Function calls not allowed` at plan/apply time.
+
    **Management Groups (avm-ptn-alz)** — version below is a reference minimum; replace with the result of `get_latest_module_version`:
    ```hcl
    module "alz" {

@@ -47,7 +47,10 @@ Generate the `platform-landing-zone.tfvars` configuration file required by the A
 
    These map to the SLZ library's policy sets (`platform/slz`) which the starter module references.
 
-5. **Generate platform-landing-zone.tfvars**: Create the file with all collected values:
+5. **Generate platform-landing-zone.tfvars**: Create the file with all collected values.
+
+   **⚠️ CRITICAL**: `.tfvars` files do NOT support Terraform functions (`jsonencode()`, `tolist()`, `toset()`, `format()`, etc.). Use only **literal HCL values** — strings, numbers, booleans, lists, and maps. Violating this causes `Error: Function calls not allowed` at plan/apply time.
+
    ```hcl
    # ==============================================================================
    # Platform Landing Zone Configuration
@@ -68,8 +71,9 @@ Generate the `platform-landing-zone.tfvars` configuration file required by the A
    # --- Sovereignty (SLZ-specific) ---
    # These settings are applied through the SLZ library policy sets.
    # Uncomment and configure as needed for your sovereignty requirements.
+   # NOTE: Use literal values only — NO function calls (jsonencode, etc.)
 
-   # allowed_locations = ["<region-1>", "<region-2>"]
+   # allowed_locations = ["swedencentral"]  # List literal (NOT jsonencode)
    # enable_cmk_enforcement = true
    # cmk_policy_effect = "Audit"  # or "Deny"
    # enable_confidential_computing = false
