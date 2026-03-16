@@ -1,5 +1,13 @@
 # COMPREHENSIVE INVENTORY: copilot-azure-plugins
 
+## PLUGINS
+
+| Plugin | Version | Agents | Skills | Description |
+|--------|---------|--------|--------|-------------|
+| arc-infra-manager | 2.1.0 | 3 | 8 | Azure Arc infrastructure management — fleet inventory, health, patching, compliance |
+| sovereign-landing-zone | 1.5.0 | 4 | 12 | Azure Sovereign Landing Zones with AVM Terraform modules — SLZ design, bootstrap, deployment |
+| github-enterprise-setup | 1.0.0 | 2 | 7 | GitHub Enterprise Cloud (GHE.com) setup — EMU, actions, security, migration |
+
 ## DIRECTORY STRUCTURE
 
 ```
