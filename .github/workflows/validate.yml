@@ -22,3 +22,6 @@ jobs:
 
       - name: Run hook tests
         run: bats tests/hooks/
+
+      - name: Run content evals
+        run: bash tests/evals/run-evals.sh

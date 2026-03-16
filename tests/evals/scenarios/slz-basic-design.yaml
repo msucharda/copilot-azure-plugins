@@ -1,0 +1,48 @@
+# SLZ Basic Design Eval
+# Tests: slz-landing-zone-architect agent with standard sovereign requirements
+# Run: Load this scenario in Copilot CLI and ask the agent to design an SLZ
+name: slz-basic-design
+agent: slz-landing-zone-architect
+description: "Validate SLZ architect produces correct design for a standard sovereign deployment"
+
+prompt: |
+  Design a Sovereign Landing Zone for Sweden Central. Requirements:
+  - Single region, single team
+  - Hub-spoke networking with Azure Firewall
+  - CMK on confidential management groups
+  - GDPR and NIS2 compliance
+  - CIDR: 10.20.0.0/16
+  - Starting fresh, no existing infrastructure
+
+rubric:
+  - id: mg-hierarchy
+    weight: 3
+    check: "Uses SLZ library MG IDs (slz, platform, management, connectivity, identity, security, landingzones, corp, online, confidential_corp, confidential_online). Does NOT prefix with organization name."
+  - id: policy-names
+    weight: 3
+    check: "References Enforce-Sovereign-Global (root) and Enforce-Sovereign-Conf (confidential MGs). Does NOT mention Deny-Resource-Locations or Deny-RSG-Locations."
+  - id: avm-modules
+    weight: 2
+    check: "Uses avm-ptn-alz, avm-ptn-alz-connectivity-hub-and-spoke-vnet, avm-ptn-alz-management. Does NOT use avm-ptn-hubnetworking or avm-ptn-virtualwan."
+  - id: policy-defaults
+    weight: 2
+    check: "Includes policy_default_values with log_analytics_workspace_id."
+  - id: tfvars-safety
+    weight: 1
+    check: "If generating .tfvars content, uses only literal HCL values (no jsonencode, tolist, etc.)."
+  - id: networking
+    weight: 1
+    check: "Designs hub-spoke with Azure Firewall, uses the provided 10.20.0.0/16 CIDR."
+
+assertions:
+  must_contain:
+    - "slz"
+    - "confidential_corp"
+    - "avm-ptn-alz"
+    - "policy_default_values"
+    - "Enforce-Sovereign-Global"
+    - "swedencentral"
+  must_not_contain:
+    - "contoso-"
+    - "Deny-Resource-Locations"
+    - "avm-ptn-hubnetworking"
