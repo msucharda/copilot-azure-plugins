@@ -1,5 +1,5 @@
 ---
-name: bootstrap-operator
+name: slz-bootstrap-operator
 description: 'Bootstrap Operator — sets up the ALZ Accelerator environment for Sovereign Landing Zone deployment, including subscriptions, CI/CD pipelines, state storage, and managed identities using the official ALZ PowerShell module.'
 tools:
   - AzureMCP/*

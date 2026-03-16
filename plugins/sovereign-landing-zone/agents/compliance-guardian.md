@@ -1,5 +1,5 @@
 ---
-name: compliance-guardian
+name: slz-compliance-guardian
 description: 'Compliance Guardian — monitors and enforces sovereign controls across the landing zone, audits Azure Policy compliance, detects configuration drift, and remediates policy violations autonomously.'
 tools:
   - AzureMCP/*

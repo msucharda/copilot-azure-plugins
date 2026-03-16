@@ -1,5 +1,5 @@
 ---
-name: fleet-manager
+name: arc-fleet-manager
 description: 'Fleet Manager — manages Azure Arc-enabled server inventory, monitors agent health, handles extension lifecycle, and produces fleet status reports.'
 tools:
   - AzureMCP/*

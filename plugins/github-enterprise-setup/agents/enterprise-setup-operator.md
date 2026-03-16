@@ -1,5 +1,5 @@
 ---
-name: enterprise-setup-operator
+name: ghe-setup-operator
 description: 'Enterprise Setup Operator — guides enterprise admins through initial GitHub Enterprise Cloud with data residency (GHE.com) setup, including trial provisioning, EMU/IdP configuration, organization creation, action policies, and billing setup.'
 tools:
   - github-mcp-server/*

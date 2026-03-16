@@ -1,5 +1,5 @@
 ---
-name: platform-admin
+name: ghe-platform-admin
 description: 'Platform Admin — manages ongoing GitHub Enterprise Cloud (GHE.com) administration including action policies, security hardening, audit log streaming, repository migration, and troubleshooting.'
 tools:
   - github-mcp-server/*

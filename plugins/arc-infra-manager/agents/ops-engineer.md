@@ -1,5 +1,5 @@
 ---
-name: ops-engineer
+name: arc-ops-engineer
 description: 'Ops Engineer — performs hands-on server troubleshooting with remote commands, manages patches via Azure Update Manager, and automates operational tasks across Windows and Linux.'
 tools:
   - AzureMCP/*

@@ -1,5 +1,5 @@
 ---
-name: compliance-auditor
+name: arc-compliance-auditor
 description: 'Compliance Auditor — audits Azure Arc server fleet against Azure Policy, machine configuration baselines, and security standards, producing compliance reports with remediation guidance.'
 tools:
   - AzureMCP/*
