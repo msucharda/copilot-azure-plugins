@@ -32,19 +32,20 @@ Configure and manage the sovereign controls that differentiate a Sovereign Landi
    | **Key Management** | Audit | External key management (BYOK, DKE, HSM-backed) |
    | **Diagnostic Logging** | DeployIfNotExists | Ensure all resources log to central workspace |
 
-2. **Configure the SLZ library reference**: The sovereignty controls come from the Azure Landing Zone Library's SLZ platform:
+2. **Configure the SLZ library reference**: The sovereignty controls come from the Azure Landing Zone Library's SLZ platform. Library references go in the **`alz` provider block**, not in the module:
    ```hcl
-   # In the avm-ptn-alz module configuration
-   library_references = {
-     alz = {
-       path = "platform/alz"
-       ref  = "2026.01.2"  # verify via get_latest_module_version
-     }
-     slz = {
-       path    = "platform/slz"
-       ref     = "2026.02.1"  # verify via get_latest_module_version
-       depends = ["alz"]
-     }
+   # In providers.tf — library references go here, NOT in the module
+   provider "alz" {
+     library_references = [
+       {
+         path = "platform/alz"
+         ref  = "2025.02.0"  # verify via get_latest_module_version
+       },
+       {
+         path = "platform/slz"
+         ref  = "2025.02.0"  # verify via get_latest_module_version
+       },
+     ]
    }
    ```
 
@@ -57,9 +58,10 @@ Configure and manage the sovereign controls that differentiate a Sovereign Landi
 3. **Configure allowed locations** (data residency):
    ```hcl
    # In the avm-ptn-alz module configuration (.tf file)
+   # Note: Value MUST be capitalized in jsonencode()
    policy_default_values = {
-     allowed_locations          = var.allowed_locations  # e.g., ["swedencentral"]
-     log_analytics_workspace_id = module.management.log_analytics_workspace.id
+     allowed_locations          = jsonencode({ Value = var.allowed_locations })
+     log_analytics_workspace_id = jsonencode({ Value = local.log_analytics_workspace_id })
    }
    ```
 

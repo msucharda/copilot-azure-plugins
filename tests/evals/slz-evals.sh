@@ -33,10 +33,14 @@ assert_contains "sovereign-landing-zone" "skills/scaffold-landing-zone/SKILL.md"
 assert_contains "sovereign-landing-zone" "skills/scaffold-landing-zone/SKILL.md" \
   "log_analytics_workspace_id" "Monitoring policies need workspace ID"
 
-# --- policy_assignments_dependencies (session f374727b turn 2) ---
-# The skill contains the correct arg AND a comment warning against the wrong one
+# --- dependencies variable (session f374727b turn 2, fixed v1.7.0) ---
+# The module uses `dependencies = { policy_role_assignments = [...] }`, not deprecated attrs
 assert_contains "sovereign-landing-zone" "skills/scaffold-landing-zone/SKILL.md" \
-  "policy_assignments_dependencies" "Correct dependency arg (NOT management_groups_dependencies)"
+  "policy_role_assignments" "Must use dependencies.policy_role_assignments for ordering"
+
+# Verify the warning against deprecated attribute names
+assert_contains "sovereign-landing-zone" "skills/scaffold-landing-zone/SKILL.md" \
+  "Do NOT use" "Must warn against deprecated dependency attributes"
 
 # --- jsonencode in tfvars (session f374727b turn 10) ---
 assert_contains "sovereign-landing-zone" "skills/scaffold-landing-zone/SKILL.md" \
@@ -51,6 +55,10 @@ assert_contains "sovereign-landing-zone" "skills/troubleshoot-deployment/SKILL.m
 # --- AVM Module Names (official ALZ docs) ---
 assert_contains "sovereign-landing-zone" "skills/scaffold-landing-zone/SKILL.md" \
   "avm-ptn-alz" "Must reference correct ALZ pattern module"
+
+# --- Library references in providers.tf, not sovereignty.tf (session 95147a34, v1.7.0) ---
+assert_contains "sovereign-landing-zone" "skills/scaffold-landing-zone/SKILL.md" \
+  "library_references" "Must document library_references placement"
 
 assert_contains "sovereign-landing-zone" "skills/design-networking/SKILL.md" \
   "avm-ptn-alz-connectivity" "Must use correct connectivity module name"
@@ -88,3 +96,37 @@ assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
 
 assert_contains "sovereign-landing-zone" "agents/terraform-operator.md" \
   "slz-" "Agent name must have slz- prefix"
+
+# --- Confidential MG placement (session 95147a34, v1.7.0) ---
+# confidential_corp and confidential_online MUST be under landingzones, not slz root
+assert_contains "sovereign-landing-zone" "skills/design-management-groups/SKILL.md" \
+  "children of" "Must document confidential MGs are children of landingzones"
+
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "children of" "Agent must document confidential MGs under landingzones"
+
+# --- Library references in provider (session 95147a34, v1.7.0) ---
+assert_contains "sovereign-landing-zone" "skills/scaffold-landing-zone/SKILL.md" \
+  "provider" "Library references go in alz provider block"
+
+assert_contains "sovereign-landing-zone" "skills/scaffold-landing-zone/SKILL.md" \
+  "platform/alz" "Must reference base ALZ library (SLZ depends on it)"
+
+# --- jsonencode Value casing (session 95147a34, v1.7.0) ---
+assert_contains "sovereign-landing-zone" "skills/scaffold-landing-zone/SKILL.md" \
+  "capital V" "Must document Value capitalization in jsonencode"
+
+assert_contains "sovereign-landing-zone" "skills/configure-sovereignty/SKILL.md" \
+  "Value" "policy_default_values must use capitalized Value key"
+
+# --- architecture_name (session 95147a34, v1.7.0) ---
+assert_contains "sovereign-landing-zone" "skills/scaffold-landing-zone/SKILL.md" \
+  "architecture_name" "Must use architecture_name module attribute"
+
+# --- sovereign_root archetype (session 95147a34, v1.7.0) ---
+assert_contains "sovereign-landing-zone" "skills/design-management-groups/SKILL.md" \
+  "sovereign_root" "Root MG must have sovereign_root archetype"
+
+# --- Two approaches: Accelerator vs Direct (session 95147a34, v1.7.0) ---
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "Approach A" "Agent must distinguish Accelerator from Direct module approach"

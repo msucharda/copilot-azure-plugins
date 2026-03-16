@@ -102,7 +102,7 @@ The following tools are available through integrations:
 5. **Design management group hierarchy**: Use `design-management-groups` to create the hierarchy. The SLZ library defines **fixed management group IDs** — do not prefix them with an organization name:
    ```
    Tenant Root Group
-   └── slz
+   └── slz                              (archetypes: root, sovereign_root)
        ├── platform
        │   ├── management
        │   ├── connectivity
@@ -111,12 +111,14 @@ The following tools are available through integrations:
        ├── landingzones
        │   ├── corp
        │   ├── online
-       │   └── public
-       ├── confidential_corp
-       ├── confidential_online
+       │   ├── public
+       │   ├── confidential_corp         (archetypes: corp, confidential_corp)
+       │   └── confidential_online       (archetypes: online, confidential_online)
        ├── sandbox
        └── decommissioned
    ```
+   **⚠️ CRITICAL**: `confidential_corp` and `confidential_online` are children of `landingzones`, NOT direct children of `slz`. This matches the official `slz.alz_architecture_definition.json` in the Azure Landing Zones Library. Do not move them to a different parent.
+   
    Customize by adding child MGs under `corp`/`online` for business units or environments. Do not rename or re-ID the library-defined MGs.
 
 6. **Design networking topology**: Use `design-networking` to plan the network:
@@ -136,21 +138,24 @@ The following tools are available through integrations:
 
 ### Phase 3: Generate
 
-9. **Scaffold the Terraform configuration**: Use `scaffold-landing-zone` to generate the complete Terraform project:
+9. **Scaffold the Terraform configuration**: Use `scaffold-landing-zone` to generate the complete Terraform project. There are two approaches:
+
+   **Approach A — ALZ Accelerator** (recommended for most customers): Use `Deploy-Accelerator` from the ALZ PowerShell module, which generates all Terraform code, CI/CD pipelines, and OIDC configuration. See https://azure.github.io/Azure-Landing-Zones/accelerator/. When using the Accelerator with Option 15 (SLZ), it creates a custom architecture file named `alz_custom.alz_architecture_definition.yaml` in the `lib/` directory.
+
+   **Approach B — Direct AVM modules** (advanced users): Compose the AVM modules manually. This gives full control but requires understanding the module interfaces. Use `architecture_name = "slz"` with library references in the `alz` provider — no custom architecture file needed unless modifying the hierarchy.
+
+   For Approach B, the project structure is:
    ```
    sovereign-landing-zone/
-   ├── main.tf                    # Module declarations
-   ├── variables.tf               # Input variable definitions
-   ├── terraform.tfvars            # Operator-specific values
-   ├── outputs.tf                  # Output values
-   ├── providers.tf                # Provider and backend config
-   ├── locals.tf                   # Local values and computations
-   ├── modules/
-   │   ├── management-groups.tf    # avm-ptn-alz module
-   │   ├── networking.tf           # avm-ptn-alz-connectivity-* module
-   │   ├── management.tf           # avm-ptn-alz-management module
-   │   └── sovereignty.tf          # SLZ-specific policy configurations
-   └── README.md                   # Deployment documentation
+   ├── main.alz.tf                  # avm-ptn-alz module (MGs, policy, roles)
+   ├── main.connectivity.tf         # avm-ptn-alz-connectivity-* module
+   ├── main.management.tf           # avm-ptn-alz-management module
+   ├── variables.tf                 # Input variable definitions
+   ├── terraform.tfvars             # Operator-specific values
+   ├── outputs.tf                   # Key outputs (IDs, endpoints)
+   ├── providers.tf                 # AzureRM, AzAPI, ALZ providers + backend
+   ├── locals.tf                    # Computed values, naming conventions
+   └── lib/                         # Custom library (only if modifying hierarchy)
    ```
 
 10. **Generate tfvars**: Use `generate-tfvars` to produce the `terraform.tfvars` file with all the design decisions from Phases 1-2 encoded as variable values.

@@ -21,23 +21,27 @@ Design the management group hierarchy that forms the governance backbone of the 
 1. **Start with the CAF reference architecture**: The Cloud Adoption Framework recommends this baseline hierarchy. **The SLZ library defines fixed management group IDs** — do not use custom prefixed IDs (e.g., `contoso-landingzones`). Use the IDs exactly as defined by the library:
    ```
    Tenant Root Group
-   └── slz                         (root — Enforce-Sovereign-Global policy)
+   └── slz                              (archetypes: root, sovereign_root)
        ├── platform
-       │   ├── management          → Log Analytics, Automation, Monitoring
-       │   ├── connectivity        → Hub networking, DNS, ExpressRoute
-       │   ├── identity            → Domain Controllers, Entra Connect
-       │   └── security            → Sentinel, security resources
+       │   ├── management               → Log Analytics, Automation, Monitoring
+       │   ├── connectivity             → Hub networking, DNS, ExpressRoute
+       │   ├── identity                 → Domain Controllers, Entra Connect
+       │   └── security                 → Sentinel, security resources
        ├── landingzones
-       │   ├── corp                → Internal workloads (connected to hub)
-       │   ├── online              → Internet-facing workloads (DMZ)
-       │   └── public              → Public-facing, no connectivity restrictions
-       ├── confidential_corp       → CMK + Confidential Computing enforced (Enforce-Sovereign-Conf)
-       ├── confidential_online     → CMK + Confidential Computing enforced (Enforce-Sovereign-Conf)
-       ├── sandbox                 → Dev/test (relaxed policies)
-       └── decommissioned          → Retired subscriptions
+       │   ├── corp                     → Internal workloads (connected to hub)
+       │   ├── online                   → Internet-facing workloads (DMZ)
+       │   ├── public                   → Public-facing, no connectivity restrictions
+       │   ├── confidential_corp        → CMK + Confidential Computing (archetypes: corp, confidential_corp)
+       │   └── confidential_online      → CMK + Confidential Computing (archetypes: online, confidential_online)
+       ├── sandbox                      → Dev/test (relaxed policies)
+       └── decommissioned               → Retired subscriptions
    ```
 
    **⚠️ CRITICAL**: The SLZ library uses these exact IDs — `slz`, `platform`, `management`, `connectivity`, `identity`, `security`, `landingzones`, `corp`, `online`, `public`, `confidential_corp`, `confidential_online`, `sandbox`, `decommissioned`. Do NOT prefix them with an organization name. The `avm-ptn-alz` module reads these IDs from the library's architecture definition.
+
+   **⚠️ CRITICAL — Confidential MG placement**: `confidential_corp` and `confidential_online` are children of `landingzones`, NOT direct children of `slz`. This matches `slz.alz_architecture_definition.json` in the Azure Landing Zones Library. Confidential MGs inherit BOTH their base archetype (corp/online) AND the confidential archetype.
+
+   **⚠️ CRITICAL — Root MG archetypes**: The root `slz` MG has TWO archetypes: `root` AND `sovereign_root`. The `sovereign_root` archetype applies `Enforce-Sovereign-Global` policies. Do not omit it.
 
 2. **Customize for the organization**: Ask the operator:
    - Do you need separate management groups per business unit under Landing Zones?
@@ -48,9 +52,10 @@ Design the management group hierarchy that forms the governance backbone of the 
 3. **Configure the avm-ptn-alz module**: The module uses architecture definitions from the Azure Landing Zone Library. The SLZ architecture definition (`slz`) extends the base `alz` definition with sovereign controls.
 
    Key configuration decisions:
-   - **Architecture definition**: Use `slz` for sovereign landing zones
-   - **Library references**: Include both `platform/alz` (base) and `platform/slz` (sovereign)
-   - **Policy defaults overrides**: Customize allowed locations, CMK requirements
+   - **Architecture name**: Use `architecture_name = "slz"` for the standard SLZ hierarchy. Only create a custom architecture file (`alz_custom`) if you need to modify the hierarchy (add/remove/rename MGs).
+   - **Library references**: Configure in the `alz` provider block (NOT in the module). Include both `platform/alz` (base) and `platform/slz` (sovereign). Order matters — `platform/alz` must come first.
+   - **Policy default values**: Use `jsonencode({ Value = ... })` with capital V for each value. Must include `log_analytics_workspace_id` and `allowed_locations` at minimum.
+   - **Dependencies**: Use the `dependencies` variable with `policy_role_assignments` key. Do NOT use deprecated `policy_assignments_dependencies` or `management_groups_dependencies`.
    - **Subscription placement**: Map existing subscriptions to management groups
    - **Custom archetypes**: Add organization-specific management group types if needed
 

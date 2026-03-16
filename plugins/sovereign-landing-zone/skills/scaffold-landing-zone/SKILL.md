@@ -33,12 +33,12 @@ Generate a complete, production-ready Terraform project for deploying an Azure S
    ├── variables.tf                     # All input variable definitions with descriptions
    ├── terraform.tfvars                 # Operator-specific values
    ├── outputs.tf                       # Key outputs (IDs, endpoints)
-   ├── providers.tf                     # AzureRM provider + backend configuration
+   ├── providers.tf                     # AzureRM, AzAPI, ALZ providers + library_references + backend
    ├── locals.tf                        # Computed values, naming conventions
    ├── management-groups.tf             # avm-ptn-alz module declaration
    ├── networking.tf                    # avm-ptn-alz-connectivity-hub-and-spoke-vnet or virtual-wan module
    ├── management.tf                    # avm-ptn-alz-management module
-   ├── sovereignty.tf                   # SLZ library references and policy overrides
+   ├── sovereignty.tf                   # Sovereign policy overrides and exemptions
    ├── versions.tf                      # Required providers and version constraints
    └── README.md                        # Deployment guide with prerequisites
    ```
@@ -52,39 +52,57 @@ Generate a complete, production-ready Terraform project for deploying an Azure S
 
    **⚠️ CRITICAL — .tfvars rule**: When generating `terraform.tfvars` or any `.tfvars` file, use **only literal HCL values** (strings, numbers, booleans, lists, maps). Terraform functions like `jsonencode()`, `tolist()`, `toset()`, `format()` are NOT supported in `.tfvars` files and cause `Error: Function calls not allowed` at plan/apply time.
 
+   **⚠️ CRITICAL — policy_default_values format**: When using `jsonencode()` in `.tf` files for `policy_default_values`, the key inside the JSON object MUST be capitalized: `jsonencode({ Value = ... })` not `jsonencode({ value = ... })`. The module expects `Value` with a capital V.
+
+   **⚠️ CRITICAL — library references go in the `alz` provider, NOT in the module**: The `alz` provider block must include library references. The module does NOT have a `library_references` attribute.
+
+   **ALZ Provider Configuration** — library references MUST include both `platform/alz` and `platform/slz` (SLZ depends on ALZ base):
+   ```hcl
+   provider "alz" {
+     library_references = [
+       {
+         path = "platform/alz"
+         ref  = "2025.02.0"  # verify via get_latest_module_version
+       },
+       {
+         path = "platform/slz"
+         ref  = "2025.02.0"  # verify via get_latest_module_version
+       },
+       # Only add this if you have a custom library (e.g., modified hierarchy):
+       # {
+       #   custom_url = "${path.root}/lib"
+       # },
+     ]
+   }
+   ```
+
    **Management Groups (avm-ptn-alz)** — version below is a reference minimum; replace with the result of `get_latest_module_version`:
    ```hcl
    module "alz" {
      source  = "Azure/avm-ptn-alz/azurerm"
      version = "~> 0.11"  # verify via get_latest_module_version
 
-     architecture_definition_name = "slz"
-     location                     = var.default_location
-     
-     # SLZ library for sovereign policies
-     library_references = {
-       alz = {
-         path = "platform/alz"
-         ref  = "2026.01.2"  # verify via get_latest_module_version
-       }
-       slz = {
-         path    = "platform/slz"
-         ref     = "2026.02.1"  # verify via get_latest_module_version
-         depends = ["alz"]
-       }
-     }
+     architecture_name = "slz"   # uses the library's built-in SLZ hierarchy
+     location          = var.default_location
 
      # REQUIRED: pass workspace ID so monitoring policies can reference it
+     # Note: Value must be capitalized in jsonencode()
      policy_default_values = {
-       log_analytics_workspace_id = module.management.log_analytics_workspace.id
+       log_analytics_workspace_id = jsonencode({ Value = local.log_analytics_workspace_id })
+       allowed_locations          = jsonencode({ Value = var.allowed_locations })
      }
 
-     # Use policy_assignments_dependencies (NOT management_groups_dependencies)
-     policy_assignments_dependencies = [
-       module.management
-     ]
+     # Use the `dependencies` variable to ensure correct ordering
+     # Do NOT use `policy_assignments_dependencies` or `management_groups_dependencies`
+     dependencies = {
+       policy_role_assignments = [
+         module.management.resource_id
+       ]
+     }
    }
    ```
+
+   **⚠️ Do NOT use a custom architecture file (`alz_custom`) unless you need to modify the management group hierarchy.** The `architecture_name = "slz"` value tells the module to use the library's built-in SLZ definition, which includes all 14 management groups with correct archetypes (including `sovereign_root` on the root MG and dual archetypes on confidential MGs).
 
    **Hub & Spoke Networking (avm-ptn-alz-connectivity-hub-and-spoke-vnet)** — verify version via `get_latest_module_version`:
    ```hcl
