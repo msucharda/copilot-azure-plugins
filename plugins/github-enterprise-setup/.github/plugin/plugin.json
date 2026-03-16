@@ -1,0 +1,55 @@
+{
+  "name": "github-enterprise-setup",
+  "description": "Copilot CLI plugin for setting up and administering GitHub Enterprise Cloud with data residency (GHE.com). Guides enterprise admins through trial provisioning, Enterprise Managed Users (EMU) configuration, IdP integration (Entra ID/Okta/PingFederate), action policies, organization setup, security hardening, and repository migration. Based on https://docs.github.com/en/enterprise-cloud@latest/admin/data-residency/getting-started-with-data-residency-for-github-enterprise-cloud",
+  "version": "1.0.0",
+  "author": {
+    "name": "msucharda",
+    "url": "https://github.com/msucharda"
+  },
+  "repository": "https://github.com/msucharda/copilot-azure-plugins",
+  "license": "MIT",
+  "keywords": [
+    "github-enterprise",
+    "ghe.com",
+    "data-residency",
+    "enterprise-managed-users",
+    "EMU",
+    "OIDC",
+    "SAML",
+    "SCIM",
+    "github-actions",
+    "migration",
+    "compliance"
+  ],
+  "prerequisites": {
+    "description": "This plugin requires the GitHub CLI for API operations on GHE.com instances.",
+    "required": [
+      {
+        "tool": "gh",
+        "version": ">=2.40",
+        "install": "https://cli.github.com/"
+      }
+    ],
+    "recommended": [
+      {
+        "plugin": "sovereign-landing-zone",
+        "source": "copilot-azure-plugins",
+        "install": "/plugin install sovereign-landing-zone@copilot-azure-plugins",
+        "skills_used": [
+          "check-prerequisites",
+          "bootstrap-accelerator"
+        ]
+      }
+    ]
+  },
+  "agents": "agents/",
+  "skills": [
+    "./skills/check-ghe-prerequisites",
+    "./skills/configure-emu",
+    "./skills/configure-actions",
+    "./skills/configure-organizations",
+    "./skills/configure-security",
+    "./skills/migrate-repositories",
+    "./skills/validate-enterprise"
+  ]
+}
