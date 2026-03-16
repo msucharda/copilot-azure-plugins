@@ -100,6 +100,31 @@ Verify that all prerequisites for the ALZ Accelerator bootstrap are met before s
    - macOS runners are NOT available on GHE.com (ALZ uses Linux runners, so this is fine)
    - All users are Enterprise Managed Users (EMU) — no personal accounts, no public repos, no gists
 
+   **GHE.com remediation — if prerequisites are NOT met**:
+
+   If external actions are blocked, provide these instructions for the enterprise admin:
+
+   1. **Allow required action namespaces**: Navigate to `https://<enterprise>.ghe.com` → Enterprise settings → Policies → Actions → General. Under "Allow select actions and reusable workflows", add:
+      - `actions/*` (GitHub first-party actions)
+      - `hashicorp/*` (Terraform tooling)
+      Alternatively, select "Allow all actions and reusable workflows" (less restrictive).
+
+   2. **Verify runner internet egress**: GitHub-hosted runners need outbound HTTPS access to:
+      - `releases.hashicorp.com` — Terraform CLI binary downloads
+      - `registry.terraform.io` — Terraform provider downloads
+      - `github.com` — action source code (cloned at workflow start)
+      - `*.blob.core.windows.net` — Azure Storage (Terraform state backend)
+      - `management.azure.com` — Azure Resource Manager API
+      If the enterprise uses a firewall or proxy, these domains must be allow-listed.
+
+   3. **Handle namespace retirement**: On GHE.com, once an action from github.com is used, its namespace (e.g., `hashicorp`) is "retired" in the enterprise to prevent spoofing. If someone has already created a `hashicorp` org on the GHE.com instance, it will conflict. The enterprise admin can release retired namespaces at: Enterprise settings → Policies → Actions → Retired namespaces.
+
+   4. **Self-hosted runners (if GitHub-hosted won't work)**: If the enterprise blocks external action access entirely or runners can't reach the internet, the operator must:
+      - Set up self-hosted runners with the required tools pre-installed (Terraform CLI, Azure CLI, PowerShell)
+      - Mirror the required actions into the GHE.com organization
+      - Set `use_self_hosted_runners: true` in `inputs.yaml` and provide `token-2`
+      - Ensure runners can reach Azure and Terraform Registry endpoints
+
    **Azure DevOps**:
    - Organization and project exist
    - PAT with required permissions
@@ -143,6 +168,11 @@ Verify that all prerequisites for the ALZ Accelerator bootstrap are met before s
    | GHE.com domain | ✅/❌ | [enterprise].ghe.com |
    | External actions allowed | ✅/❌/⚠️ | actions/* and hashicorp/* namespaces |
    | Runner internet access | ✅/❌ | releases.hashicorp.com, registry.terraform.io |
+   | Namespace conflicts | ✅/⚠️ | No retired namespace conflicts |
+
+   If any GHE.com check fails, provide the relevant remediation steps from the
+   "GHE.com remediation" section above and identify the enterprise admin action
+   needed. The SLZ agent cannot fix these — they require enterprise admin access.
 
    ### Recommendation
    ✅ All prerequisites met. Ready for bootstrap.
