@@ -1,0 +1,42 @@
+# GHE.com Setup with Entra ID OIDC Eval
+# Tests: ghe-setup-operator agent guiding through initial GHE.com provisioning
+name: ghe-entra-oidc-setup
+agent: ghe-setup-operator
+description: "Validate GHE setup operator correctly guides Entra ID OIDC configuration"
+
+prompt: |
+  I need to set up a new GitHub Enterprise Cloud with data residency.
+  EU region, Entra ID for identity, Azure billing. Subdomain: testcorp.
+  Walk me through the setup from scratch.
+
+rubric:
+  - id: trial-signup
+    weight: 2
+    check: "Directs to github.com/account/enterprises/new. Mentions subdomain cannot be changed. Mentions github.com personal account needed."
+  - id: oidc-flow
+    weight: 3
+    check: "Recommends OIDC for Entra ID. Mentions the built-in 'Enable SSO → OIDC auth' button on GHE.com. Does NOT instruct to manually create an Enterprise Application in Entra ID."
+  - id: 2fa-required
+    weight: 2
+    check: "States 2FA on setup user is required (not optional). Explains setup user is break-glass account."
+  - id: scim-setup
+    weight: 2
+    check: "Uses scim:enterprise scope PAT with no expiration. Mentions '+ Add new configuration' in Entra ID. Uses correct SCIM URL: api.<enterprise>.ghe.com/scim/v2/enterprises/<enterprise>."
+  - id: billing
+    weight: 2
+    check: "Mentions billing address and shipping address must be filled first. Mentions Azure subscription Owner role needed (separate from Tenant GA)."
+  - id: emu-limitations
+    weight: 1
+    check: "Mentions no public repos, no forking from github.com, no gists."
+
+assertions:
+  must_contain:
+    - "Enable SSO"
+    - "OIDC"
+    - "scim:enterprise"
+    - "billing address"
+    - "2FA"
+    - "ghe.com"
+  must_not_contain:
+    - "manually create an Enterprise Application"
+    - "api.github.com"

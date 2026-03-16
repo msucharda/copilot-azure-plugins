@@ -1,0 +1,36 @@
+# SLZ with GHE.com Bootstrap Eval
+# Tests: slz-bootstrap-operator with GHE.com as VCS
+name: slz-ghe-bootstrap
+agent: slz-bootstrap-operator
+description: "Validate bootstrap operator correctly handles GHE.com as VCS target"
+
+prompt: |
+  I need to bootstrap the ALZ Accelerator. I'm using GitHub Enterprise Cloud
+  with data residency at contoso.ghe.com. Terraform, vWAN scenario.
+  I have 4 subscriptions ready. Guide me through the bootstrap.
+
+rubric:
+  - id: ghe-domain
+    weight: 3
+    check: "Asks for or uses github_organization_domain_name in inputs.yaml. Value should be contoso.ghe.com."
+  - id: pat-guidance
+    weight: 2
+    check: "Recommends classic PAT. If fine-grained, mentions Email addresses → Read permission. PAT created at contoso.ghe.com (not github.com)."
+  - id: action-access
+    weight: 2
+    check: "Warns about GitHub Marketplace unavailability. Mentions need to allow-list actions/* and hashicorp/* namespaces."
+  - id: deploy-accelerator
+    weight: 2
+    check: "Uses Deploy-Accelerator with -inputs, -starterAdditionalFiles, -output parameters."
+  - id: post-bootstrap
+    weight: 1
+    check: "Mentions token scrubbing after bootstrap. Mentions OIDC federation handles ongoing auth."
+
+assertions:
+  must_contain:
+    - "github_organization_domain_name"
+    - "ghe.com"
+    - "Deploy-Accelerator"
+    - "classic PAT"
+  must_not_contain:
+    - "github.com/settings/personal-access-tokens"
