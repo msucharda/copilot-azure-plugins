@@ -95,8 +95,8 @@ Use `validate-enterprise` to verify everything works: EMU auth, API access, acti
 
 ### What This Agent Does NOT Do
 
-- Ongoing security administration (hand off to platform-admin)
-- Repository migration (hand off to platform-admin)
+- Ongoing security hardening — GHAS, secret scanning, CodeQL, audit log streaming (hand off to ghe-platform-admin using `configure-security` skill)
+- Repository migration (hand off to ghe-platform-admin using `migrate-repositories` skill)
 - Landing zone deployment (hand off to sovereign-landing-zone plugin)
 
 ## Official Resources

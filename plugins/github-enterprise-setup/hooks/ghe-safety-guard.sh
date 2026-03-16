@@ -22,14 +22,14 @@ if [[ "$TOOL_NAME" == "bash" || "$TOOL_NAME" == "shell" ]]; then
     reason="BLOCKED: Deleting enterprise-level resources is not allowed via automation. Use the GitHub web UI with proper authorization."
   fi
 
-  # BLOCK: Organization deletion
-  if [[ "$decision" != "deny" ]] && echo "$CMD" | grep -qE 'gh api.*DELETE.*/orgs/'; then
+  # BLOCK: Organization deletion (exact path: /orgs/name with no further path segments)
+  if [[ "$decision" != "deny" ]] && echo "$CMD" | grep -qE 'gh api.*-X DELETE.*/orgs/[^/]+(\s|$|--)'; then
     decision="deny"
     reason="BLOCKED: Organization deletion is irreversible. Use the GitHub web UI for this operation."
   fi
 
-  # BLOCK: Repository deletion
-  if [[ "$decision" != "deny" ]] && echo "$CMD" | grep -qE 'gh api.*-X DELETE.*/repos/[^/]+/[^/]+\b'; then
+  # BLOCK: Repository deletion (exact path: /repos/owner/repo with no further path segments)
+  if [[ "$decision" != "deny" ]] && echo "$CMD" | grep -qE 'gh api.*-X DELETE.*/repos/[^/]+/[^/]+(\s|$|--)'; then
     decision="deny"
     reason="BLOCKED: Repository deletion is irreversible. Use the GitHub web UI for this operation."
   fi
@@ -37,7 +37,7 @@ if [[ "$TOOL_NAME" == "bash" || "$TOOL_NAME" == "shell" ]]; then
   # WARN checks — only if not already denied
 
   # WARN: Team deletion
-  if [[ "$decision" != "deny" ]] && echo "$CMD" | grep -qE 'gh api.*DELETE.*/teams/'; then
+  if [[ "$decision" != "deny" ]] && echo "$CMD" | grep -qE 'gh api.*-X DELETE.*/teams/'; then
     reason="WARNING: Deleting a team will remove all its members and repository access. Verify this is intentional."
   fi
 
