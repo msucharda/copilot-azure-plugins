@@ -31,8 +31,15 @@ Validate that all prerequisites for GitHub Enterprise Cloud with data residency 
    - **PingFederate**: SAML only. Verify admin access.
 
 4. Verify Azure billing prerequisites (if paying via Azure subscription):
-   - Admin access to Azure portal or admin consent workflow configured
-   - **Note**: The "Metered billing via Azure" option is at the **very bottom** of the Payment information page (Enterprise settings → Billing & Licensing → Payment information → scroll down). If not visible, common reasons: existing contract/agreement, wrong account level (must be Enterprise, not personal), insufficient permissions (must be enterprise owner), or not on GitHub Enterprise Cloud plan.
+   - **Owner role on the Azure subscription** — this is an Azure RBAC role, NOT an Entra ID role. Entra ID Global Administrator does NOT automatically grant Azure subscription Owner. These are separate permission planes.
+     ```bash
+     # Check if you have Owner on the target subscription
+     az role assignment list --subscription "<sub-id>" --assignee "$(az ad signed-in-user show --query id -o tsv)" --query "[?roleDefinitionName=='Owner']" -o table
+     ```
+     If missing, an existing Owner must grant it: `az role assignment create --assignee "<user>" --role "Owner" --scope "/subscriptions/<sub-id>"`
+   - **Cloud Application Administrator** (or Global Admin) in Entra ID — required to grant admin consent when GitHub's billing app requests tenant access
+   - **Billing address and shipping address** must be filled in on GHE.com BEFORE the "Add Azure Subscription" option appears (Enterprise settings → Billing & Licensing → Payment information)
+   - **Note**: The "Metered billing via Azure" option is at the **very bottom** of the Payment information page. If not visible after filling addresses, common reasons: existing contract/agreement, wrong account level (must be Enterprise, not personal), insufficient permissions (must be enterprise owner), or not on GitHub Enterprise Cloud plan.
    Reference: https://docs.github.com/en/enterprise-cloud@latest/billing/managing-the-plan-for-your-github-account/connecting-an-azure-subscription#prerequisites
 
 5. Verify network requirements: Client systems must trust GitHub SSH fingerprints and access GHE.com hostnames.

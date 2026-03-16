@@ -57,7 +57,26 @@ Use `configure-actions` to allow-list required action namespaces (`actions/*`, `
 
 ### 6. Set Up Billing
 
-Guide the admin to connect Azure subscription or credit card. Enterprise settings → Billing & Licensing → Payment information → **scroll to bottom** → "Metered billing via Azure" → Add Azure Subscription. Requires Azure portal admin access for admin consent workflow.
+Guide the admin through connecting Azure subscription (or credit card). There are several prerequisite steps that must be completed in order:
+
+1. **Fill billing address first** — Enterprise settings → Billing & Licensing → Payment information → fill in company name, street address, city, country. **Save this before proceeding** — the "Add Azure Subscription" option will NOT appear until billing address is saved.
+2. **Fill shipping address** — Usually same as billing address. Also required before Azure link appears.
+3. **Set billing email per org** — Each organization requires a billing email (a required API field). This is just for notification purposes — actual billing is handled at the enterprise level via Azure. Use any valid work email.
+4. **Link Azure subscription** — Scroll to bottom → "Metered billing via Azure" → Click "Add Azure Subscription". This redirects to Microsoft login for admin consent.
+
+**Azure billing prerequisites** (verify before the admin consent flow):
+- **Owner role** on the target Azure subscription (NOT just Tenant Global Administrator — Azure RBAC Owner on the subscription is a separate role assignment)
+- **Cloud Application Administrator** (or Global Admin) in Entra ID — needed to grant admin consent for the GitHub billing app
+- ⚠️ Common confusion: Entra ID Global Admin does NOT automatically grant Azure subscription Owner. These are separate permission planes. If the admin can't link the subscription, check `az role assignment list --subscription <sub-id> --assignee <user>` for the Owner role.
+
+**What gets billed through Azure** (all MACC-eligible):
+- Enterprise seat licenses (per user/month)
+- GitHub Copilot seats
+- Actions minutes (beyond included amount)
+- Packages storage
+- GitHub Advanced Security (if enabled)
+
+**Trial notes**: During the 30-day trial, no billing is charged. To cancel a trial: Enterprise settings → scroll to "Danger zone" at the bottom → Delete enterprise. To convert to paid: click "Activate enterprise" and complete billing setup.
 
 ### 7. Validate
 

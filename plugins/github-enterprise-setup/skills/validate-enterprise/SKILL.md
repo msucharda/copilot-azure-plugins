@@ -130,6 +130,13 @@ Comprehensive post-setup validation of a GHE.com instance. Run after initial set
    | Secret scanning | ✅/❌ | [status] |
    | Branch protection | ✅/❌ | [repos protected] |
 
+   ### Billing
+   | Check | Status | Detail |
+   |-------|--------|--------|
+   | Billing address | ✅/❌ | [company name, country] |
+   | Azure subscription linked | ✅/❌ | [subscription name] |
+   | Org billing emails | ✅/❌ | [count] orgs configured |
+
    ### Recommendation
    ✅ Enterprise ready for use.
    ❌ [N] checks failed. Fix items above.
