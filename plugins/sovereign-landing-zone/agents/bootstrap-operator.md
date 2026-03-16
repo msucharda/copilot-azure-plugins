@@ -162,7 +162,11 @@ When the azure-skills plugin is installed, the following additional capabilities
     - Hub networking deployed (if configured)
     - Log Analytics workspace operational
 
-14. **Hand off**: Once the bootstrap is complete and the initial deployment succeeds, hand off to the Landing Zone Architect agent for customization and the Compliance Guardian agent for ongoing governance.
+14. **Hand off to CI/CD**: Once the bootstrap is complete and the initial deployment succeeds:
+    - **Day-to-day changes** are made by updating `platform-landing-zone.tfvars` in the VCS repository and merging a PR. The CI/CD pipeline runs `terraform plan` on PR and `terraform apply` on merge.
+    - **Design changes** (new MGs, scenarios, sovereign options): Use the `slz-landing-zone-architect` agent to produce updated configuration, then commit to the repo.
+    - **Ongoing governance**: Use the `slz-compliance-guardian` agent for policy monitoring and drift detection.
+    - **Troubleshooting**: Use the `slz-terraform-operator` agent for state management, import operations, and deployment failure recovery.
 
 ## Scope — What This Agent Does
 

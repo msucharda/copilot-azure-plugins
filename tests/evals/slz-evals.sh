@@ -127,6 +127,24 @@ assert_contains "sovereign-landing-zone" "skills/scaffold-landing-zone/SKILL.md"
 assert_contains "sovereign-landing-zone" "skills/design-management-groups/SKILL.md" \
   "sovereign_root" "Root MG must have sovereign_root archetype"
 
-# --- Two approaches: Accelerator vs Direct (session 95147a34, v1.7.0) ---
+# --- Official ALZ Accelerator workflow (session 7b3dbbd4, v1.8.0) ---
+# Agent MUST follow the official process, NOT generate Terraform directly
 assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
-  "Approach A" "Agent must distinguish Accelerator from Direct module approach"
+  "Do NOT generate Terraform files" "Agent must forbid direct Terraform generation"
+
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "slz-bootstrap-operator" "Agent must hand off to bootstrap operator"
+
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "platform-landing-zone.tfvars" "Agent must produce tfvars config, not .tf files"
+
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "azure.github.io/Azure-Landing-Zones/accelerator" "Agent must reference official ALZ docs"
+
+# scaffold-landing-zone must be gated behind "advanced only" in agent skills list
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "Advanced only" "scaffold-landing-zone must be marked advanced-only in skills"
+
+# Bootstrap operator must reference Phase 3 CI/CD
+assert_contains "sovereign-landing-zone" "agents/bootstrap-operator.md" \
+  "CI/CD" "Bootstrap must hand off to CI/CD for deployment"
