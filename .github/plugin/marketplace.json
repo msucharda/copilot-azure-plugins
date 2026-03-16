@@ -1,7 +1,7 @@
 {
   "name": "copilot-azure-plugins",
   "metadata": {
-    "description": "Copilot CLI plugin marketplace for Azure operators — Arc infrastructure management, Sovereign Landing Zones, GitHub Enterprise setup, and more",
+    "description": "Copilot CLI plugin marketplace for Azure operators \u2014 Arc infrastructure management, Sovereign Landing Zones, GitHub Enterprise setup, and more",
     "version": "1.1.0",
     "pluginRoot": "./plugins"
   },
@@ -14,25 +14,46 @@
       "name": "arc-infra-manager",
       "source": "arc-infra-manager",
       "description": "Copilot CLI plugin for Azure Arc infrastructure operators covering fleet inventory, health monitoring, remote operations, patch management, compliance auditing, and reporting for hybrid Windows and Linux servers.",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "author": {
         "name": "msucharda",
         "url": "https://github.com/msucharda"
       },
-      "keywords": ["azure-arc", "hybrid-cloud", "infrastructure", "server-management", "compliance", "patching", "windows", "linux"],
+      "keywords": [
+        "azure-arc",
+        "hybrid-cloud",
+        "infrastructure",
+        "server-management",
+        "compliance",
+        "patching",
+        "windows",
+        "linux"
+      ],
       "license": "MIT",
       "repository": "https://github.com/msucharda/copilot-azure-plugins"
     },
     {
       "name": "sovereign-landing-zone",
       "source": "sovereign-landing-zone",
-      "description": "Copilot CLI plugin for designing and deploying Azure Sovereign Landing Zones using Azure Verified Modules (AVM) Terraform modules. Features autonomous Terraform operations, sovereign compliance controls (data residency, CMK, confidential computing), and hub/vWAN networking — all built on avm-ptn-alz, avm-ptn-alz-connectivity-hub-and-spoke-vnet, avm-ptn-alz-connectivity-virtual-wan, and avm-ptn-alz-management. Supports GitHub.com and GHE.com environments.",
-      "version": "1.5.0",
+      "description": "Copilot CLI plugin for designing and deploying Azure Sovereign Landing Zones using Azure Verified Modules (AVM) Terraform modules. Features autonomous Terraform operations, sovereign compliance controls (data residency, CMK, confidential computing), and hub/vWAN networking \u2014 all built on avm-ptn-alz, avm-ptn-alz-connectivity-hub-and-spoke-vnet, avm-ptn-alz-connectivity-virtual-wan, and avm-ptn-alz-management. Supports GitHub.com and GHE.com environments.",
+      "version": "1.6.0",
       "author": {
         "name": "msucharda",
         "url": "https://github.com/msucharda"
       },
-      "keywords": ["azure", "sovereign-landing-zone", "terraform", "azure-verified-modules", "landing-zone", "infrastructure-as-code", "compliance", "data-residency", "vwan", "hub-spoke", "ghe.com"],
+      "keywords": [
+        "azure",
+        "sovereign-landing-zone",
+        "terraform",
+        "azure-verified-modules",
+        "landing-zone",
+        "infrastructure-as-code",
+        "compliance",
+        "data-residency",
+        "vwan",
+        "hub-spoke",
+        "ghe.com"
+      ],
       "license": "MIT",
       "repository": "https://github.com/msucharda/copilot-azure-plugins"
     },
@@ -40,12 +61,24 @@
       "name": "github-enterprise-setup",
       "source": "github-enterprise-setup",
       "description": "Copilot CLI plugin for setting up and administering GitHub Enterprise Cloud with data residency (GHE.com). Guides enterprise admins through trial provisioning, Enterprise Managed Users (EMU) configuration, IdP integration, action policies, organization setup, security hardening, and repository migration.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": {
         "name": "msucharda",
         "url": "https://github.com/msucharda"
       },
-      "keywords": ["github-enterprise", "ghe.com", "data-residency", "enterprise-managed-users", "EMU", "OIDC", "SAML", "SCIM", "github-actions", "migration", "compliance"],
+      "keywords": [
+        "github-enterprise",
+        "ghe.com",
+        "data-residency",
+        "enterprise-managed-users",
+        "EMU",
+        "OIDC",
+        "SAML",
+        "SCIM",
+        "github-actions",
+        "migration",
+        "compliance"
+      ],
       "license": "MIT",
       "repository": "https://github.com/msucharda/copilot-azure-plugins"
     }

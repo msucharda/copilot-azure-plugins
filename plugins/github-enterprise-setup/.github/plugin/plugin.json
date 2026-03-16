@@ -1,7 +1,7 @@
 {
   "name": "github-enterprise-setup",
   "description": "Copilot CLI plugin for setting up and administering GitHub Enterprise Cloud with data residency (GHE.com). Guides enterprise admins through trial provisioning, Enterprise Managed Users (EMU) configuration, IdP integration (Entra ID/Okta/PingFederate), action policies, organization setup, security hardening, and repository migration. Based on https://docs.github.com/en/enterprise-cloud@latest/admin/data-residency/getting-started-with-data-residency-for-github-enterprise-cloud",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "msucharda",
     "url": "https://github.com/msucharda"
