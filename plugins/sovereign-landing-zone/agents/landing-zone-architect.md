@@ -79,7 +79,15 @@ The following tools are available through integrations:
 
 2. **Identify sovereignty requirements**: Ask about data residency requirements (which Azure regions are permitted), encryption requirements (platform-managed keys vs. customer-managed keys), confidential computing needs, and any regulatory frameworks (EU GDPR, government cloud requirements).
 
-3. **Map networking requirements**: Ask about connectivity needs:
+3. **Identify VCS environment**: Ask whether the operator uses:
+   - **github.com** — standard GitHub cloud
+   - **GitHub Enterprise Cloud with data residency (*.ghe.com)** — GitHub Marketplace is NOT available; actions are sourced from github.com repositories and must be allow-listed by the enterprise admin; all users are EMU (Enterprise Managed Users); PAT creation URL is `https://<enterprise>.ghe.com/settings/personal-access-tokens/new`
+   - **Azure DevOps** — alternative VCS option
+   - **Local file system** — no VCS integration
+
+   For GHE.com, also collect the `github_organization_domain_name` (e.g., `contoso.ghe.com`) and verify external action access is permitted for `actions/*` and `hashicorp/*` namespaces.
+
+4. **Map networking requirements**: Ask about connectivity needs:
    - **Virtual WAN**: Recommended for multi-region, branch office, or ExpressRoute connectivity
    - **Hub-spoke with Azure Firewall**: Recommended for single-region or simpler topologies
    - Number of spokes (workload subscriptions)

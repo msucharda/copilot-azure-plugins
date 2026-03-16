@@ -76,13 +76,29 @@ Verify that all prerequisites for the ALZ Accelerator bootstrap are met before s
 
 5. **Verify VCS prerequisites**: Based on the operator's chosen VCS:
 
-   **GitHub**:
+   **GitHub (github.com)**:
    - Organization account exists (not personal — free orgs are supported but repos will be public)
    - **Recommended: Use a classic PAT** — classic tokens work more reliably with the ALZ Accelerator than fine-grained PATs. Required scopes: `repo`, `workflow`, `admin:org`, `read:user`, `delete_repo`
    - If using fine-grained PATs instead, **you must also add** `Account permissions → Email addresses → Read` — without this, the Terraform GitHub provider's `data "github_organization"` data source fails
    - Fine-grained PAT repository permissions: Actions, Administration, Contents, Environments, Secrets, Variables, Workflows (R/W)
    - Fine-grained PAT organization permissions: Members (R/W), Self-hosted runners (R/W — only if using runner groups at the org level)
    - Optional second PAT (token-2) for self-hosted runners — **only needed if** `use_self_hosted_runners: true`. Permissions: Repository Administration (R/W), Organization Self-hosted runners (R/W)
+
+   **GitHub Enterprise Cloud with data residency (*.ghe.com)**:
+   - All GitHub requirements above apply, plus the following:
+   - Ask the operator for their GHE.com domain (e.g., `contoso.ghe.com`)
+   - PAT creation URL is `https://<enterprise>.ghe.com/settings/personal-access-tokens/new` (NOT github.com)
+   - API URL is `https://api.<enterprise>.ghe.com` (NOT api.github.com)
+   - **GitHub Marketplace is NOT available** on GHE.com — actions are sourced directly from github.com repositories
+   - The ALZ Accelerator workflows require these actions from github.com:
+     - `actions/checkout@v4` (GitHub first-party)
+     - `hashicorp/setup-terraform@v3` (third-party — downloads Terraform from releases.hashicorp.com)
+     - `actions/upload-artifact@v4` / `actions/download-artifact@v4` (GitHub first-party)
+     - `actions/github-script@v6` (GitHub first-party)
+   - **Verify external action access**: The enterprise must allow sourcing actions from github.com. Check with the enterprise admin if actions from `actions/*` and `hashicorp/*` namespaces are permitted
+   - **Internet access required**: GitHub-hosted runners must reach `releases.hashicorp.com` (Terraform binary) and `registry.terraform.io` (Terraform providers)
+   - macOS runners are NOT available on GHE.com (ALZ uses Linux runners, so this is fine)
+   - All users are Enterprise Managed Users (EMU) — no personal accounts, no public repos, no gists
 
    **Azure DevOps**:
    - Organization and project exist
@@ -120,6 +136,13 @@ Verify that all prerequisites for the ALZ Accelerator bootstrap are met before s
    | Check | Status | Detail |
    |-------|--------|--------|
    | [VCS-specific checks] | ✅/❌ | [detail] |
+
+   ### GHE.com (only if applicable)
+   | Check | Status | Detail |
+   |-------|--------|--------|
+   | GHE.com domain | ✅/❌ | [enterprise].ghe.com |
+   | External actions allowed | ✅/❌/⚠️ | actions/* and hashicorp/* namespaces |
+   | Runner internet access | ✅/❌ | releases.hashicorp.com, registry.terraform.io |
 
    ### Recommendation
    ✅ All prerequisites met. Ready for bootstrap.

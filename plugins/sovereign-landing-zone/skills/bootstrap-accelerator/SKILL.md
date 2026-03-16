@@ -41,6 +41,7 @@ Generate the bootstrap configuration file (`inputs.yaml`) and execute the ALZ Ac
    | `github_organization_name` | GitHub org name |
    | `use_self_hosted_runners` | `true` or `false` |
    | `use_private_networking` | `true` or `false` |
+   | `github_organization_domain_name` | **GHE.com only**: e.g., `contoso.ghe.com` (omit for github.com) |
 
    **For Azure DevOps VCS**, also collect:
    | Input | Description |
@@ -101,9 +102,14 @@ Generate the bootstrap configuration file (`inputs.yaml`) and execute the ALZ Ac
 
    # VCS-specific settings
    # (GitHub or Azure DevOps fields here)
+
+   # GHE.com only — uncomment if using GitHub Enterprise Cloud with data residency
+   # github_organization_domain_name: "<enterprise>.ghe.com"
    ```
 
    **⚠️ Token security**: Prefer using environment variables (`TF_VAR_github_personal_access_token`, `TF_VAR_github_runners_personal_access_token`) instead of hardcoding tokens in `inputs.yaml`. If tokens are placed in the file, they MUST be scrubbed after bootstrap completes (see step 9).
+
+   **GHE.com note**: If the operator is using GitHub Enterprise Cloud with data residency (`*.ghe.com`), the `github_organization_domain_name` setting is **required**. Without it, the bootstrap will target github.com instead of the GHE.com instance. The ALZ PowerShell module handles the API URL and OIDC issuer differences automatically when this is set.
 
    **SLZ architecture file**: If adding SLZ library files under `$targetFolderPath/config/lib/architecture_definitions/`, use the default file name `alz_custom.alz_architecture_definition.yaml`. The official docs warn that renaming this file creates duplicate architecture files. If renamed, set `terraform_architecture_file_path` in `inputs.yaml`.
 
