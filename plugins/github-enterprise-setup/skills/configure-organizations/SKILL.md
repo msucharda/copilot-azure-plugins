@@ -63,6 +63,14 @@ Create the organizational structure on GHE.com for enterprise teams. For IaC/pla
    - Base permissions: Read (least privilege)
    - Repository creation: Restricted to admins
 
+6. **Understand EMU limitations** for organization usage:
+   - **No forking from github.com**: EMU users CANNOT fork public repositories from github.com into GHE.com organizations. To use open-source code, clone the repo and push to a new GHE.com repository instead.
+   - **No public repos**: All repositories on GHE.com are private or internal — public repos are permanently unavailable with EMU.
+   - **No gists**: Gists are not available with EMU accounts.
+   - **Codespaces**: NOT available on GHE.com for EMU users.
+   - **GitHub Marketplace**: Not available — apps and actions must be sourced from github.com repositories directly.
+   - **License consumption**: Users consume a license seat when they are provisioned via SCIM and assigned to an organization. Licenses are NOT manually assigned to users — they are consumed automatically when a user is added to an org.
+
 ## Input
 
 - Enterprise subdomain

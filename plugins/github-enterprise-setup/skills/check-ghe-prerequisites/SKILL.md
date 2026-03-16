@@ -17,26 +17,30 @@ Validate that all prerequisites for GitHub Enterprise Cloud with data residency 
 
 ## Instructions
 
-1. Verify `gh` CLI is installed and meets the minimum version requirement:
+1. **Verify a github.com personal account exists**: A personal account on **github.com** is required to initiate the GHE.com trial/signup at [github.com/account/enterprises/new](https://github.com/account/enterprises/new). This account is only used to start the signup — it does NOT become part of the GHE.com enterprise. After provisioning, a separate setup user is created on the `<enterprise>.ghe.com` domain.
+
+2. Verify `gh` CLI is installed and meets the minimum version requirement:
    ```bash
    gh --version
    ```
    Must be >= 2.40. Install from: https://cli.github.com/
 
-2. Determine IdP choice and readiness:
+3. Determine IdP choice and readiness:
    - **Entra ID** (recommended): Verify tenant access, check if OIDC or SAML. OIDC is recommended for Conditional Access Policy support. If multiple enterprises from one tenant: the first can use SAML or OIDC, but each additional enterprise must use SAML.
    - **Okta**: SAML only. Verify Okta admin access and SCIM support.
    - **PingFederate**: SAML only. Verify admin access.
 
-3. Verify Azure billing prerequisites (if paying via Azure subscription): Admin access to Azure portal or admin consent workflow configured.
+4. Verify Azure billing prerequisites (if paying via Azure subscription):
+   - Admin access to Azure portal or admin consent workflow configured
+   - **Note**: The "Metered billing via Azure" option is at the **very bottom** of the Payment information page (Enterprise settings → Billing & Licensing → Payment information → scroll down). If not visible, common reasons: existing contract/agreement, wrong account level (must be Enterprise, not personal), insufficient permissions (must be enterprise owner), or not on GitHub Enterprise Cloud plan.
    Reference: https://docs.github.com/en/enterprise-cloud@latest/billing/managing-the-plan-for-your-github-account/connecting-an-azure-subscription#prerequisites
 
-4. Verify network requirements: Client systems must trust GitHub SSH fingerprints and access GHE.com hostnames.
+5. Verify network requirements: Client systems must trust GitHub SSH fingerprints and access GHE.com hostnames.
    Reference: https://docs.github.com/en/enterprise-cloud@latest/admin/data-residency/network-details-for-ghecom
 
-5. Choose data residency region: EU, US, Australia, or Japan.
+6. Choose data residency region: EU, US, Australia, or Japan.
 
-6. Choose enterprise subdomain: `<name>.ghe.com` — **cannot be changed after creation**.
+7. Choose enterprise subdomain: `<name>.ghe.com` — **⚠️ cannot be changed after creation**. Double-check spelling.
 
 ## Input
 
