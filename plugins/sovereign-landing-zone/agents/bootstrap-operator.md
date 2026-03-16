@@ -83,7 +83,8 @@ When the azure-skills plugin is installed, the following additional capabilities
    Use `azure-role` to verify these assignments exist.
 
 5. **Set up VCS prerequisites**: Ask the operator which VCS they want to use:
-   - **GitHub** — requires a GitHub organization (not personal account) and a fine-grained PAT with specific permissions (Actions, Administration, Contents, Environments, Secrets, Variables, Workflows R/W + Members R/W)
+   - **GitHub (github.com)** — requires a GitHub organization (not personal account) and a PAT. **Recommended: classic PAT** with scopes `repo`, `workflow`, `admin:org`, `read:user`, `delete_repo` (more reliable than fine-grained PATs). If using fine-grained PATs, also add `Account permissions → Email addresses → Read` to avoid `data "github_organization"` failures.
+   - **GitHub Enterprise Cloud with data residency (*.ghe.com)** — same as GitHub above, plus: collect the `github_organization_domain_name` (e.g., `contoso.ghe.com`); verify external actions are allowed for `actions/*` and `hashicorp/*` namespaces; PAT creation is at `https://<enterprise>.ghe.com/settings/personal-access-tokens/new`; GitHub Marketplace is NOT available; runners need internet access to `releases.hashicorp.com` and `registry.terraform.io`
    - **Azure DevOps** — requires an Azure DevOps organization and project
    - **Local file system** — no additional prerequisites
 

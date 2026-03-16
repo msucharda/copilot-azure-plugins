@@ -134,6 +134,44 @@ Diagnose Terraform deployment failures, identify root causes, apply fixes, and r
    3. Run `terraform fmt` on the file
    4. Retry the deployment
 
+   ### GitHub Actions Failures (GHE.com / CI/CD pipeline)
+   ```
+   Error: Unable to resolve action `hashicorp/setup-terraform@v3`
+   ```
+   OR:
+   ```
+   Error: This request was rejected because the requester is not authorized to access this resource
+   ```
+   **Root cause**: GitHub Enterprise Cloud with data residency (GHE.com) does not have GitHub Marketplace. Actions must be sourced from github.com repositories, and the enterprise must allow external action access.
+   **Autonomous fix**:
+   1. Check if the enterprise allows actions from github.com:
+      - Enterprise Settings → Policies → Actions → "Allow select actions" or "Allow all actions"
+      - Required namespaces: `actions/*`, `hashicorp/*`
+   2. If blocked by policy, recommend the enterprise admin add these to the allow-list:
+      - `actions/checkout@v4`
+      - `actions/upload-artifact@v4`
+      - `actions/download-artifact@v4`
+      - `actions/github-script@v6`
+      - `hashicorp/setup-terraform@v3`
+   3. If external actions are completely prohibited, the operator must either:
+      a. Fork/mirror required actions into the GHE.com organization
+      b. Replace marketplace actions with inline `run:` steps (e.g., download terraform binary directly)
+   4. Verify runners can reach `releases.hashicorp.com` and `registry.terraform.io` (required for Terraform downloads)
+
+   ### GitHub API URL Mismatch (GHE.com)
+   ```
+   Error: GET https://api.github.com/... 401 Unauthorized
+   ```
+   **Root cause**: The Terraform GitHub provider or a GitHub Action is targeting `api.github.com` instead of the GHE.com API (`api.<enterprise>.ghe.com`).
+   **Autonomous fix**:
+   1. Verify `github_organization_domain_name` is set in `inputs.yaml`
+   2. Check the Terraform GitHub provider configuration has the correct `base_url`
+   3. For actions, ensure `GITHUB_TOKEN` scoping is correct (GHE.com tokens don't work on github.com and vice versa)
+   4. If the failing action **hardcodes** `api.github.com` in its source code (a known GHE.com limitation), it cannot be fixed by configuration alone. In this case:
+      - Fork/mirror the action into the GHE.com organization and patch the hardcoded URL
+      - Replace the action with an inline `run:` step that uses `$GITHUB_API_URL` instead of a hardcoded URL
+      - Contact the action maintainer to request GHE.com support via the `GITHUB_API_URL` environment variable
+
 3. **Apply fix and retry**: After applying the fix:
    ```bash
    terraform plan -out=retry.tfplan
