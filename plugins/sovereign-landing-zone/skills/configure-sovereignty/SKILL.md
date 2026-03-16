@@ -56,11 +56,20 @@ Configure and manage the sovereign controls that differentiate a Sovereign Landi
 
 3. **Configure allowed locations** (data residency):
    ```hcl
-   # In the avm-ptn-alz module configuration
+   # In the avm-ptn-alz module configuration (.tf file)
    policy_default_values = {
      allowed_locations          = var.allowed_locations  # e.g., ["swedencentral"]
      log_analytics_workspace_id = module.management.log_analytics_workspace.id
    }
+   ```
+
+   **⚠️ CRITICAL — .tfvars files**: When setting `allowed_locations` in a `.tfvars` file, use **literal HCL values only**. Terraform functions like `jsonencode()`, `tolist()`, `toset()` are NOT allowed in `.tfvars` files — they cause `Error: Function calls not allowed`. Use:
+   ```hcl
+   # ✅ CORRECT (list literal in .tfvars)
+   allowed_locations = ["swedencentral"]
+
+   # ❌ WRONG (function call — .tfvars files don't support functions)
+   allowed_locations = jsonencode(["swedencentral"])
    ```
 
    Key considerations:

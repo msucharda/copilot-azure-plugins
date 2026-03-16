@@ -116,6 +116,24 @@ Diagnose Terraform deployment failures, identify root causes, apply fixes, and r
    4. Either upgrade Terraform or adjust module version constraints to a compatible version
    5. Run `terraform init -upgrade` and retry
 
+   ### Function Calls in .tfvars Files
+   ```
+   Error: Function calls not allowed
+     on *.tfvars line N:
+       N:     some_value = jsonencode(["value"])
+   Functions may not be called here.
+   ```
+   **Root cause**: `.tfvars` files only support literal HCL values. Terraform functions (`jsonencode`, `tolist`, `toset`, `format`, etc.) are NOT allowed.
+   **Autonomous fix**:
+   1. Identify the `.tfvars` file and line from the error
+   2. Replace the function call with the equivalent literal value:
+      - `jsonencode(["swedencentral"])` → `["swedencentral"]` (HCL list literal)
+      - `tolist(["a", "b"])` → `["a", "b"]` (HCL list literal)
+      - `toset(["a"])` → `["a"]` (HCL list literal — sets aren't valid in tfvars)
+      - `jsonencode({key = "val"})` → `{key = "val"}` (HCL map literal)
+   3. Run `terraform fmt` on the file
+   4. Retry the deployment
+
 3. **Apply fix and retry**: After applying the fix:
    ```bash
    terraform plan -out=retry.tfplan
