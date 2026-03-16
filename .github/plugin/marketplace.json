@@ -36,7 +36,7 @@
       "name": "sovereign-landing-zone",
       "source": "sovereign-landing-zone",
       "description": "Copilot CLI plugin for designing and deploying Azure Sovereign Landing Zones using Azure Verified Modules (AVM) Terraform modules. Features autonomous Terraform operations, sovereign compliance controls (data residency, CMK, confidential computing), and hub/vWAN networking \u2014 all built on avm-ptn-alz, avm-ptn-alz-connectivity-hub-and-spoke-vnet, avm-ptn-alz-connectivity-virtual-wan, and avm-ptn-alz-management. Supports GitHub.com and GHE.com environments.",
-      "version": "1.6.0",
+      "version": "1.7.0",
       "author": {
         "name": "msucharda",
         "url": "https://github.com/msucharda"
