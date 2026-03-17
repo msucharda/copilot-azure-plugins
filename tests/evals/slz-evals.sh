@@ -148,3 +148,45 @@ assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
 # Bootstrap operator must reference Phase 3 CI/CD
 assert_contains "sovereign-landing-zone" "agents/bootstrap-operator.md" \
   "CI/CD" "Bootstrap must hand off to CI/CD for deployment"
+
+# --- ALZ Checklist (session 7b3dbbd4, v1.9.0) ---
+# Agent must embed the official checklist decisions, not freeform questions
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "Bootstrap Decisions Checklist" "Agent must have structured bootstrap checklist"
+
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "Terraform Starter Decisions Checklist" "Agent must have structured starter checklist"
+
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "checklist.xlsx" "Agent must reference the official checklist spreadsheet"
+
+# Checklist must include all key config settings
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "bootstrap_module_name" "Checklist must map to bootstrap_module_name config"
+
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "starter_locations" "Checklist must include starter_locations"
+
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "use_private_networking" "Checklist must include networking decisions"
+
+# All 9 scenarios must be listed
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "Single-region" "Must list single-region scenarios"
+
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "Multi-region" "Must list multi-region scenarios"
+
+# Option 15 (SLZ) must always be Yes
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "ALWAYS for this agent" "Option 15 SLZ must always be enabled"
+
+# --- Design Verification / Self-Review (v1.9.0) ---
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "Design Verification" "Agent must have self-review phase"
+
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "common deviations" "Agent must check for known deviation patterns"
+
+assert_contains "sovereign-landing-zone" "agents/landing-zone-architect.md" \
+  "MANDATORY" "Self-review must be mandatory before handoff"
